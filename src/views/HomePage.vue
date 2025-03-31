@@ -29,10 +29,19 @@
     <section id="features" class="features">
       <h2>核心功能</h2>
       <div class="feature-grid">
-        <div class="feature-card" v-for="(feature, index) in features" :key="index">
-          <i :class="feature.icon"></i>
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
+        <div class="feature-card" v-for="(feature, index) in features" :key="index" :class="{ 'visible': true }">
+          <div class="feature-icon">
+            <i :class="feature.icon"></i>
+          </div>
+          <div class="feature-content">
+            <h3>{{ feature.title }}</h3>
+            <p class="feature-desc">{{ feature.description }}</p>
+            <ul class="feature-list">
+              <li v-for="(item, itemIndex) in feature.details" :key="itemIndex">
+                {{ item }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -120,22 +129,68 @@ export default {
         {
           icon: 'el-icon-lock',
           title: '资产托管',
-          description: '安全可靠的区块链资产托管服务'
+          description: '安全可靠的区块链资产托管服务',
+          details: [
+            '多重签名钱包管理',
+            '冷热钱包分离存储',
+            '多层级权限控制',
+            '24/7资产安全监控'
+          ]
         },
         {
           icon: 'el-icon-monitor',
           title: '实时监控',
-          description: '全天候监控资产状态和交易情况'
+          description: '全天候监控资产状态和交易情况',
+          details: [
+            '实时资产估值分析',
+            '交易流水实时追踪',
+            '异常行为预警',
+            '自动化风险控制'
+          ]
         },
         {
           icon: 'el-icon-document',
           title: '智能合约',
-          description: '自动化执行交易和管理流程'
+          description: '自动化执行交易和管理流程',
+          details: [
+            '自定义合约模板',
+            '智能合约审计',
+            '自动化交易执行',
+            '合约性能优化'
+          ]
         },
         {
           icon: 'el-icon-data-line',
           title: '数据分析',
-          description: '专业的数据分析和可视化报表'
+          description: '专业的数据分析和可视化报表',
+          details: [
+            '多维度数据分析',
+            '自定义报表生成',
+            '趋势预测分析',
+            '决策支持系统'
+          ]
+        },
+        {
+          icon: 'el-icon-refresh',
+          title: '资产追溯',
+          description: '区块链技术保障资产全程可追溯',
+          details: [
+            '资产来源验证',
+            '交易历史追踪',
+            '资产流转记录',
+            '全链路追溯查询'
+          ]
+        },
+        {
+          icon: 'el-icon-user',
+          title: '权限管理',
+          description: '灵活的多级权限管理系统',
+          details: [
+            '角色权限配置',
+            '操作权限分级',
+            '审批流程管理',
+            '访问控制策略'
+          ]
         }
       ],
       caseSlides: [
@@ -429,35 +484,113 @@ section {
 
   .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px;
 
     .feature-card {
-      background: #2a2a2a;
+      background: rgba(26, 26, 26, 0.7);
+      border-radius: 16px;
       padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      transition: transform 0.3s;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(64, 201, 198, 0.1);
+      position: relative;
+      overflow: hidden;
 
       &:hover {
         transform: translateY(-10px);
+        border-color: rgba(64, 201, 198, 0.3);
+        box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
+
+        .feature-icon i {
+          transform: scale(1.1) rotate(10deg);
+          color: #40c9c6;
+        }
       }
 
-      i {
-        font-size: 40px;
-        color: #409EFF;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(64, 201, 198, 0.1), transparent);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+
+      .feature-icon {
         margin-bottom: 20px;
+        
+        i {
+          font-size: 48px;
+          color: #40c9c6;
+          transition: all 0.4s ease;
+        }
       }
 
-      h3 {
-        color: #fff;
-        margin-bottom: 15px;
-      }
+      .feature-content {
+        h3 {
+          color: #fff;
+          font-size: 24px;
+          margin-bottom: 15px;
+          position: relative;
+          padding-bottom: 15px;
 
-      p {
-        color: #999;
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #40c9c6;
+            border-radius: 2px;
+          }
+        }
+
+        .feature-desc {
+          color: #bbb;
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+
+        .feature-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+
+          li {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+
+            &::before {
+              content: '•';
+              color: #40c9c6;
+              position: absolute;
+              left: 0;
+              font-size: 18px;
+              line-height: 1;
+            }
+
+            &:hover {
+              color: #40c9c6;
+              transform: translateX(5px);
+              transition: all 0.3s ease;
+            }
+          }
+        }
       }
     }
   }
@@ -790,6 +923,37 @@ body {
     .section-desc {
       font-size: 16px;
       margin-bottom: 40px;
+    }
+  }
+
+  .features {
+    padding: 60px 20px;
+
+    .feature-grid {
+      grid-template-columns: 1fr;
+      gap: 30px;
+
+      .feature-card {
+        padding: 25px;
+
+        .feature-icon i {
+          font-size: 36px;
+        }
+
+        .feature-content {
+          h3 {
+            font-size: 20px;
+          }
+
+          .feature-desc {
+            font-size: 14px;
+          }
+
+          .feature-list li {
+            font-size: 13px;
+          }
+        }
+      }
     }
   }
 }
