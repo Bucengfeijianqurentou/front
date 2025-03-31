@@ -16,11 +16,26 @@
       </div>
     </nav>
 
-    <!-- Banner区域 -->
+    <!-- Banner区域增强 -->
     <section id="home" class="banner">
+      <div class="blockchain-particles"></div>
       <div class="banner-content">
         <h1>区块链资产管理平台</h1>
         <p>安全、高效、透明的区块链资产管理解决方案</p>
+        <div class="banner-stats">
+          <div class="stat-item">
+            <span class="stat-number">100+</span>
+            <span class="stat-label">企业客户</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">￥10B+</span>
+            <span class="stat-label">资产管理规模</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">99.99%</span>
+            <span class="stat-label">系统可用性</span>
+          </div>
+        </div>
         <button class="btn-start" @click="handleStart">开始使用</button>
       </div>
     </section>
@@ -41,6 +56,83 @@
                 {{ item }}
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 新增：技术优势 -->
+    <section id="technology" class="technology">
+      <h2>技术优势</h2>
+      <div class="tech-grid">
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-cpu"></i>
+          </div>
+          <h3>高性能架构</h3>
+          <p>支持每秒千万级交易处理</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 90%"></div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-lock"></i>
+          </div>
+          <h3>多重安全保障</h3>
+          <p>军工级加密技术</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 95%"></div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-connection"></i>
+          </div>
+          <h3>共识机制</h3>
+          <p>创新的DPOS共识算法</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 85%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 新增：实时数据 -->
+    <section id="live-data" class="live-data">
+      <h2>实时数据</h2>
+      <div class="data-grid">
+        <div class="data-card">
+          <h3>当前链上交易</h3>
+          <div class="data-value">{{transactionCount}}</div>
+          <div class="data-chart">
+            <!-- 这里可以添加echarts图表 -->
+          </div>
+        </div>
+        <div class="data-card">
+          <h3>活跃用户数</h3>
+          <div class="data-value">{{activeUsers}}</div>
+          <div class="data-chart">
+            <!-- 这里可以添加echarts图表 -->
+          </div>
+        </div>
+        <div class="data-card">
+          <h3>系统性能</h3>
+          <div class="data-value">{{systemPerformance}}ms</div>
+          <div class="data-chart">
+            <!-- 这里可以添加echarts图表 -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 新增：合作伙伴 -->
+    <section id="partners" class="partners">
+      <h2>合作伙伴</h2>
+      <div class="partner-scroll">
+        <div class="partner-grid">
+          <div class="partner-logo" v-for="i in 8" :key="i">
+            <div class="logo-placeholder">Partner {{i}}</div>
           </div>
         </div>
       </div>
@@ -209,7 +301,11 @@ export default {
           title: '供应链金融区块链项目',
           description: '运用区块链技术重构供应链金融业务流程，实现资产可追溯、不可篡改'
         }
-      ]
+      ],
+      transactionCount: '1,234,567',
+      activeUsers: '45,678',
+      systemPerformance: '0.023',
+      updateTimer: null
     }
   },
   methods: {
@@ -240,6 +336,19 @@ export default {
           })
         }
       })
+    },
+    initBlockchainParticles() {
+      // 初始化区块链粒子动画
+      const particles = document.querySelector('.blockchain-particles');
+      // 这里可以添加粒子动画逻辑
+    },
+    startDataUpdate() {
+      // 模拟实时数据更新
+      this.updateTimer = setInterval(() => {
+        this.transactionCount = (parseInt(this.transactionCount.replace(/,/g, '')) + Math.floor(Math.random() * 100)).toLocaleString();
+        this.activeUsers = (parseInt(this.activeUsers.replace(/,/g, '')) + Math.floor(Math.random() * 10)).toLocaleString();
+        this.systemPerformance = (Math.random() * 0.01 + 0.02).toFixed(3);
+      }, 3000);
     }
   },
   mounted() {
@@ -247,10 +356,15 @@ export default {
     document.querySelector('.home-page').addEventListener('scroll', this.handleScroll)
     // 初始化第一屏
     document.querySelector('#home').classList.add('visible')
+    this.initBlockchainParticles();
+    this.startDataUpdate();
   },
   beforeDestroy() {
     // 移除滚动监听
     document.querySelector('.home-page').removeEventListener('scroll', this.handleScroll)
+    if (this.updateTimer) {
+      clearInterval(this.updateTimer);
+    }
   }
 }
 </script>
@@ -274,14 +388,46 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 50px;
-  background: rgba(18, 18, 18, 0.8);
+  background: rgba(10, 25, 47, 0.95);
   backdrop-filter: blur(10px);
   z-index: 1000;
+  border-bottom: 1px solid rgba(64, 201, 198, 0.1);
+  transition: all 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent,
+      rgba(64, 201, 198, 0.2),
+      rgba(147, 51, 234, 0.2),
+      transparent
+    );
+  }
 
   .logo {
     font-size: 24px;
     font-weight: bold;
-    color: #fff;
+    background: linear-gradient(120deg, #40c9c6, #9333ea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    
+    &::before {
+      content: '⬡';
+      font-size: 28px;
+      background: linear-gradient(120deg, #40c9c6, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rotateLogo 6s linear infinite;
+    }
   }
 
   .nav-links {
@@ -292,56 +438,137 @@ export default {
       color: #fff;
       text-decoration: none;
       font-size: 16px;
-      transition: color 0.3s;
+      transition: all 0.3s;
+      position: relative;
+      padding: 5px 0;
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, #40c9c6, #9333ea);
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.3s ease;
+      }
 
       &:hover {
-        color: #409EFF;
+        color: #40c9c6;
+        text-shadow: 0 0 10px rgba(64, 201, 198, 0.3);
+
+        &::before {
+          transform: scaleX(1);
+          transform-origin: left;
+        }
+      }
+
+      &.active {
+        color: #40c9c6;
+        
+        &::before {
+          transform: scaleX(1);
+        }
       }
     }
   }
 
   .auth-buttons {
     display: flex;
-    gap: 15px;
     align-items: center;
-    height: 100%;
+    gap: 15px;
+    height: 36px;
 
     button {
-      height: 32px;
-      min-width: 68px;
-      padding: 0 16px;
-      border-radius: 4px;
+      all: unset;
+      height: 36px;
+      min-width: 90px;
+      padding: 0 20px;
+      border-radius: 18px;
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: inline-flex;
+      position: relative;
+      overflow: hidden;
+      display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 1;
-      margin: 0;
+      box-sizing: border-box;
     }
 
     .btn-login {
-      background: transparent;
       border: 1px solid #40c9c6;
       color: #40c9c6;
+      background: transparent;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(64, 201, 198, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
 
       &:hover {
-        background: rgba(64, 201, 198, 0.1);
-        border-color: #66d9d6;
-        color: #66d9d6;
+        border-color: #9333ea;
+        color: #9333ea;
+        box-shadow: 0 0 15px rgba(64, 201, 198, 0.2);
+
+        &::before {
+          left: 100%;
+        }
       }
     }
 
     .btn-register {
-      background: #40c9c6;
-      border: 1px solid #40c9c6;
+      background: linear-gradient(45deg, #40c9c6, #9333ea);
       color: #fff;
+      border: none;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
 
       &:hover {
-        background: #66d9d6;
-        border-color: #66d9d6;
+        transform: translateY(-2px);
+        box-shadow: 
+          0 5px 15px rgba(64, 201, 198, 0.3),
+          0 0 30px rgba(147, 51, 234, 0.2);
+
+        &::before {
+          left: 100%;
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }
@@ -381,7 +608,8 @@ section {
   justify-content: center;
   text-align: center;
   position: relative;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a192f 100%);
+  background: linear-gradient(135deg, #0a192f 0%, #0d1b2a 100%);
+  overflow: hidden;
 
   &::before {
     content: '';
@@ -391,46 +619,118 @@ section {
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 20% 20%, rgba(64, 201, 198, 0.05) 0%, transparent 25%),
-      radial-gradient(circle at 80% 80%, rgba(64, 201, 198, 0.05) 0%, transparent 25%);
+      radial-gradient(circle at 20% 20%, rgba(64, 201, 198, 0.1) 0%, transparent 25%),
+      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 25%);
     pointer-events: none;
+    animation: glowPulse 8s infinite alternate;
   }
 
-  &::after {
-    content: '';
+  .blockchain-particles {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2340c9c6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-    opacity: 0.5;
     pointer-events: none;
+    opacity: 0.6;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        linear-gradient(45deg, transparent 45%, rgba(64, 201, 198, 0.1) 50%, transparent 55%),
+        linear-gradient(-45deg, transparent 45%, rgba(147, 51, 234, 0.1) 50%, transparent 55%);
+      background-size: 30px 30px;
+      animation: particleMove 20s infinite linear;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg stroke='%2340c9c6' stroke-width='0.5' stroke-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      animation: particleMove 15s infinite linear reverse;
+    }
   }
 
   .banner-content {
     max-width: 800px;
     position: relative;
     z-index: 1;
+    padding: 0 20px;
 
     h1 {
       font-size: 48px;
-      color: #fff;
+      background: linear-gradient(120deg, #40c9c6, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       margin-bottom: 20px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      text-shadow: 0 0 30px rgba(64, 201, 198, 0.3);
+      animation: titleGlow 2s ease-in-out infinite alternate;
     }
 
     p {
       font-size: 20px;
       color: #fff;
       margin-bottom: 30px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      text-shadow: 0 0 20px rgba(64, 201, 198, 0.2);
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 0.5s;
+    }
+
+    .banner-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 30px 0;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 1s;
+
+      .stat-item {
+        text-align: center;
+        
+        .stat-number {
+          display: block;
+          font-size: 36px;
+          font-weight: bold;
+          background: linear-gradient(120deg, #40c9c6, #9333ea);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 8px;
+          position: relative;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 2px;
+            background: linear-gradient(90deg, #40c9c6, #9333ea);
+            border-radius: 1px;
+          }
+        }
+
+        .stat-label {
+          font-size: 16px;
+          color: #fff;
+          opacity: 0.8;
+        }
+      }
     }
 
     .btn-start {
       padding: 12px 30px;
       font-size: 18px;
-      background: #40c9c6;
+      background: linear-gradient(45deg, #40c9c6, #9333ea);
       border: none;
       border-radius: 5px;
       color: #fff;
@@ -438,36 +738,38 @@ section {
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      opacity: 0;
+      animation: fadeInUp 1s ease forwards 1.5s;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
 
       &:hover {
-        background: #66d9d6;
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(64, 201, 198, 0.3);
+        box-shadow: 
+          0 5px 15px rgba(64, 201, 198, 0.3),
+          0 0 30px rgba(147, 51, 234, 0.2);
+
+        &::before {
+          left: 100%;
+        }
       }
 
       &:active {
         transform: translateY(0);
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-          45deg,
-          transparent,
-          rgba(255, 255, 255, 0.1),
-          transparent
-        );
-        transform: rotate(45deg);
-        transition: all 0.3s;
-      }
-
-      &:hover::after {
-        left: 100%;
       }
     }
   }
@@ -591,6 +893,156 @@ section {
             }
           }
         }
+      }
+    }
+  }
+}
+
+.technology {
+  background: rgba(26, 26, 26, 0.95);
+  padding: 100px 50px;
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .tech-item {
+      background: rgba(38, 38, 38, 0.7);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-10px);
+
+        .tech-progress .progress-bar {
+          width: 100% !important;
+        }
+      }
+
+      .tech-icon {
+        font-size: 48px;
+        color: #40c9c6;
+        margin-bottom: 20px;
+      }
+
+      h3 {
+        color: #fff;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #bbb;
+        margin-bottom: 20px;
+      }
+
+      .tech-progress {
+        height: 4px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+        overflow: hidden;
+
+        .progress-bar {
+          height: 100%;
+          background: linear-gradient(90deg, #40c9c6, #66d9d6);
+          transition: width 1.5s ease;
+        }
+      }
+    }
+  }
+}
+
+.live-data {
+  background: rgba(26, 26, 26, 0.95);
+  padding: 100px 50px;
+
+  .data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .data-card {
+      background: rgba(38, 38, 38, 0.7);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+
+      h3 {
+        color: #fff;
+        margin-bottom: 15px;
+      }
+
+      .data-value {
+        font-size: 36px;
+        color: #40c9c6;
+        margin-bottom: 20px;
+      }
+
+      .data-chart {
+        height: 150px;
+        // 这里可以添加图表样式
+      }
+    }
+  }
+}
+
+.partners {
+  background: rgba(26, 26, 26, 0.95);
+  padding: 100px 50px;
+
+  .partner-scroll {
+    overflow: hidden;
+    position: relative;
+    
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(90deg, rgba(26,26,26,0.95), transparent);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(-90deg, rgba(26,26,26,0.95), transparent);
+    }
+  }
+
+  .partner-grid {
+    display: flex;
+    gap: 30px;
+    padding: 20px 0;
+    animation: scrollPartners 30s linear infinite;
+
+    .partner-logo {
+      flex: 0 0 200px;
+      height: 100px;
+      background: rgba(38, 38, 38, 0.7);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+
+      .logo-placeholder {
+        color: #666;
       }
     }
   }
@@ -955,6 +1407,79 @@ body {
         }
       }
     }
+  }
+
+  .banner-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .tech-grid, .data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-scroll {
+    &::before, &::after {
+      width: 50px;
+    }
+  }
+}
+
+@keyframes glowPulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes particleMove {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes scrollPartners {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes titleGlow {
+  0% {
+    text-shadow: 0 0 20px rgba(64, 201, 198, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotateLogo {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style> 
