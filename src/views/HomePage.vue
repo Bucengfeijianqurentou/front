@@ -1,77 +1,83 @@
 <template>
   <div class="home-page">
     <!-- 导航栏 -->
-    <nav class="navbar">
-      <div class="nav-left">
-        <img src="../assets/logo.svg" alt="Logo" class="logo">
-        <span class="brand-name">BlockAsset</span>
+    <nav class="nav-bar">
+      <div class="logo">BlockAsset</div>
+      <div class="nav-links">
+        <a href="#home" class="nav-link">首页</a>
+        <a href="#features" class="nav-link">功能</a>
+        <a href="#about" class="nav-link">关于我们</a>
+        <a href="#contact" class="nav-link">联系我们</a>
       </div>
-      <div class="nav-center">
-        <a href="#home" class="nav-item">首页</a>
-        <a href="#features" class="nav-item">功能</a>
-        <a href="#about" class="nav-item">关于我们</a>
-        <a href="#contact" class="nav-item">联系我们</a>
-      </div>
-      <div class="nav-right">
-        <router-link to="/login" class="btn btn-login">登录</router-link>
-        <router-link to="/register" class="btn btn-register">注册</router-link>
+      <div class="auth-buttons">
+        <button class="btn-login" @click="handleLogin">登录</button>
+        <button class="btn-register" @click="handleRegister">注册</button>
       </div>
     </nav>
 
     <!-- Banner区域 -->
-    <section class="banner" id="home">
+    <section id="home" class="banner">
       <div class="banner-content">
-        <h1>安全高效的区块链资产管理平台</h1>
-        <p>基于区块链技术，为您提供透明、安全、高效的资产管理解决方案</p>
-        <a href="#features" class="btn btn-primary">了解更多</a>
+        <h1>区块链资产管理平台</h1>
+        <p>安全、高效、透明的区块链资产管理解决方案</p>
+        <button class="btn-start" @click="handleStart">开始使用</button>
       </div>
     </section>
 
     <!-- 功能介绍 -->
-    <section class="features" id="features">
+    <section id="features" class="features">
       <h2>核心功能</h2>
-      <div class="feature-cards">
-        <div class="feature-card">
-          <i class="feature-icon el-icon-lock"></i>
-          <h3>资产托管</h3>
-          <p>安全可靠的资产托管服务，多重加密保护您的数字资产</p>
-        </div>
-        <div class="feature-card">
-          <i class="feature-icon el-icon-monitor"></i>
-          <h3>实时监控</h3>
-          <p>24/7全天候资产监控，实时掌握资产动态</p>
-        </div>
-        <div class="feature-card">
-          <i class="feature-icon el-icon-document"></i>
-          <h3>智能合约</h3>
-          <p>自动化合约执行，提高资产管理效率</p>
-        </div>
-        <div class="feature-card">
-          <i class="feature-icon el-icon-data-analysis"></i>
-          <h3>数据分析</h3>
-          <p>专业的数据分析工具，助您做出明智决策</p>
+      <div class="feature-grid">
+        <div class="feature-card" v-for="(feature, index) in features" :key="index">
+          <i :class="feature.icon"></i>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
         </div>
       </div>
     </section>
 
-    <!-- 优势展示 -->
-    <section class="advantages">
-      <h2>我们的优势</h2>
-      <div class="advantage-items">
-        <div class="advantage-item">
-          <div class="advantage-number">01</div>
-          <h3>高安全性</h3>
-          <p>采用先进的区块链技术，确保资产安全</p>
+    <!-- 关于我们 -->
+    <section id="about" class="about-us">
+      <h2>关于我们</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <p>BlockAsset 是一个专业的区块链资产管理平台，致力于为企业和个人提供安全、透明、高效的区块链资产管理服务。</p>
+          <div class="advantages">
+            <div class="advantage-item">
+              <h4>安全可靠</h4>
+              <p>采用多重签名和冷热钱包分离技术，确保资产安全</p>
+            </div>
+            <div class="advantage-item">
+              <h4>透明公开</h4>
+              <p>所有交易记录上链，实现全程可追溯</p>
+            </div>
+            <div class="advantage-item">
+              <h4>便捷高效</h4>
+              <p>智能合约自动化执行，提高管理效率</p>
+            </div>
+          </div>
         </div>
-        <div class="advantage-item">
-          <div class="advantage-number">02</div>
-          <h3>透明可信</h3>
-          <p>所有交易记录不可篡改，公开透明</p>
+      </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="contact">
+      <h2>联系我们</h2>
+      <div class="contact-grid">
+        <div class="contact-card">
+          <i class="el-icon-message"></i>
+          <h3>邮件咨询</h3>
+          <p>support@blockasset.com</p>
         </div>
-        <div class="advantage-item">
-          <div class="advantage-number">03</div>
-          <h3>用户友好</h3>
-          <p>简洁直观的操作界面，轻松管理资产</p>
+        <div class="contact-card">
+          <i class="el-icon-phone"></i>
+          <h3>电话支持</h3>
+          <p>400-888-8888</p>
+        </div>
+        <div class="contact-card">
+          <i class="el-icon-service"></i>
+          <h3>在线客服</h3>
+          <p>工作日 9:00-18:00</p>
         </div>
       </div>
     </section>
@@ -80,13 +86,12 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-info">
-          <h3>BlockAsset</h3>
-          <p>© 2024 BlockAsset. 保留所有权利</p>
+          <p>&copy; 2025 BlockAsset. All rights reserved.</p>
         </div>
-        <div class="footer-links">
-          <a href="#" class="social-link"><i class="el-icon-message"></i></a>
-          <a href="#" class="social-link"><i class="el-icon-phone"></i></a>
+        <div class="social-links">
+          <a href="#" class="social-link"><i class="el-icon-platform-eleme"></i></a>
           <a href="#" class="social-link"><i class="el-icon-chat-dot-round"></i></a>
+          <a href="#" class="social-link"><i class="el-icon-connection"></i></a>
         </div>
       </div>
     </footer>
@@ -96,297 +101,520 @@
 <script>
 export default {
   name: 'HomePage',
-  mounted() {
-    this.observeElements();
+  data() {
+    return {
+      features: [
+        {
+          icon: 'el-icon-lock',
+          title: '资产托管',
+          description: '安全可靠的区块链资产托管服务'
+        },
+        {
+          icon: 'el-icon-monitor',
+          title: '实时监控',
+          description: '全天候监控资产状态和交易情况'
+        },
+        {
+          icon: 'el-icon-document',
+          title: '智能合约',
+          description: '自动化执行交易和管理流程'
+        },
+        {
+          icon: 'el-icon-data-line',
+          title: '数据分析',
+          description: '专业的数据分析和可视化报表'
+        }
+      ]
+    }
   },
   methods: {
-    observeElements() {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, {
-        threshold: 0.1
-      });
-
-      // 观察所有的feature cards
-      document.querySelectorAll('.feature-card').forEach(card => {
-        observer.observe(card);
-      });
-
-      // 观察所有的advantage items
-      document.querySelectorAll('.advantage-item').forEach(item => {
-        observer.observe(item);
-      });
+    handleLogin() {
+      this.$router.push('/login')
+    },
+    handleRegister() {
+      this.$router.push('/register')
+    },
+    handleStart() {
+      this.$router.push('/login')
+    },
+    handleScroll() {
+      const sections = document.querySelectorAll('section')
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect()
+        const isVisible = (rect.top <= window.innerHeight * 0.75) && (rect.bottom >= window.innerHeight * 0.25)
+        if (isVisible) {
+          section.classList.add('visible')
+          // 更新导航栏高亮
+          const navLinks = document.querySelectorAll('.nav-link')
+          navLinks.forEach(link => {
+            if (link.getAttribute('href').slice(1) === section.id) {
+              link.classList.add('active')
+            } else {
+              link.classList.remove('active')
+            }
+          })
+        }
+      })
     }
+  },
+  mounted() {
+    // 监听滚动事件
+    document.querySelector('.home-page').addEventListener('scroll', this.handleScroll)
+    // 初始化第一屏
+    document.querySelector('#home').classList.add('visible')
+  },
+  beforeDestroy() {
+    // 移除滚动监听
+    document.querySelector('.home-page').removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .home-page {
-  min-height: 100vh;
-  background-color: #0a192f;
-  color: #ffffff;
+  scroll-behavior: smooth;
+  height: 100%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a192f 100%);
+  overflow-y: auto;
+  position: relative;
 }
 
-.navbar {
+.nav-bar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  height: 60px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 5%;
-  background-color: rgba(10, 25, 47, 0.95);
+  padding: 0 50px;
+  background: rgba(18, 18, 18, 0.8);
   backdrop-filter: blur(10px);
   z-index: 1000;
+
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 30px;
+
+    .nav-link {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #409EFF;
+      }
+    }
+  }
+
+  .auth-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    height: 100%;
+
+    button {
+      height: 32px;
+      min-width: 68px;
+      padding: 0 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      margin: 0;
+    }
+
+    .btn-login {
+      background: transparent;
+      border: 1px solid #40c9c6;
+      color: #40c9c6;
+
+      &:hover {
+        background: rgba(64, 201, 198, 0.1);
+        border-color: #66d9d6;
+        color: #66d9d6;
+      }
+    }
+
+    .btn-register {
+      background: #40c9c6;
+      border: 1px solid #40c9c6;
+      color: #fff;
+
+      &:hover {
+        background: #66d9d6;
+        border-color: #66d9d6;
+      }
+    }
+  }
 }
 
-.nav-left {
+section {
+  min-height: 100vh;
+  padding: 80px 50px;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1s ease;
+  position: relative;
   display: flex;
-  align-items: center;
-}
+  flex-direction: column;
+  justify-content: center;
+  scroll-margin-top: 60px; // 为导航栏留出空间
 
-.logo {
-  height: 40px;
-  margin-right: 1rem;
-}
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
-.brand-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #64ffda;
-}
-
-.nav-center {
-  display: flex;
-  gap: 2rem;
-}
-
-.nav-item {
-  color: #8892b0;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.nav-item:hover {
-  color: #64ffda;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1rem;
-}
-
-.btn {
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: all 0.3s;
-}
-
-.btn-login {
-  color: #64ffda;
-  border: 1px solid #64ffda;
-}
-
-.btn-register {
-  background-color: #64ffda;
-  color: #0a192f;
+  h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 50px;
+    color: #fff;
+  }
 }
 
 .banner {
   height: 100vh;
+  padding-top: 60px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9));
+  text-align: center;
   position: relative;
-  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a192f 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(64, 201, 198, 0.05) 0%, transparent 25%),
+      radial-gradient(circle at 80% 80%, rgba(64, 201, 198, 0.05) 0%, transparent 25%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2340c9c6' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .banner-content {
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+
+    h1 {
+      font-size: 48px;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    p {
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 30px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .btn-start {
+      padding: 12px 30px;
+      font-size: 18px;
+      background: #40c9c6;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        background: #66d9d6;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(64, 201, 198, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.3s;
+      }
+
+      &:hover::after {
+        left: 100%;
+      }
+    }
+  }
 }
 
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 20%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
-    linear-gradient(45deg, rgba(10, 25, 47, 0.8) 0%, rgba(10, 25, 47, 0.9) 100%);
-  z-index: -1;
+.features {
+  background: rgba(26, 26, 26, 0.95);
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 50px;
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .feature-card {
+      background: #2a2a2a;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s;
+
+      &:hover {
+        transform: translateY(-10px);
+      }
+
+      i {
+        font-size: 40px;
+        color: #409EFF;
+        margin-bottom: 20px;
+      }
+
+      h3 {
+        color: #fff;
+        margin-bottom: 15px;
+      }
+
+      p {
+        color: #999;
+      }
+    }
+  }
 }
 
-.banner-content {
-  text-align: center;
-  max-width: 800px;
-  padding: 0 2rem;
+.about-us {
+  background: rgba(42, 42, 42, 0.95);
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 50px;
+
+  .about-content {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    .about-text {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 50px;
+    }
+
+    .advantages {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+
+      .advantage-item {
+        background: #1a1a1a;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+
+        h4 {
+          color: #409EFF;
+          margin-bottom: 15px;
+        }
+
+        p {
+          color: #999;
+        }
+      }
+    }
+  }
 }
 
-.banner-content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #64ffda;
-  animation: fadeInUp 0.8s ease-out;
-}
+.contact {
+  background: rgba(26, 26, 26, 0.95);
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 50px;
 
-.banner-content p {
-  font-size: 1.2rem;
-  color: #8892b0;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.8s ease-out 0.2s backwards;
-}
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
 
-.btn-primary {
-  background-color: #64ffda;
-  color: #0a192f;
-  padding: 1rem 2rem;
-  font-weight: bold;
-  animation: fadeInUp 0.8s ease-out 0.4s backwards;
-}
+    .contact-card {
+      background: #2a2a2a;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
 
-.features, .advantages {
-  padding: 5rem 5%;
-}
+      i {
+        font-size: 40px;
+        color: #409EFF;
+        margin-bottom: 20px;
+      }
 
-h2 {
-  text-align: center;
-  color: #64ffda;
-  margin-bottom: 3rem;
-  font-size: 2rem;
-}
+      h3 {
+        color: #fff;
+        margin-bottom: 15px;
+      }
 
-.feature-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-}
-
-.feature-card {
-  background-color: rgba(100, 255, 218, 0.1);
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.feature-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.feature-card:hover {
-  transform: translateY(-10px);
-  background-color: rgba(100, 255, 218, 0.15);
-  box-shadow: 0 4px 20px rgba(100, 255, 218, 0.1);
-}
-
-.feature-icon {
-  font-size: 2.5rem;
-  color: #64ffda;
-  margin-bottom: 1rem;
-}
-
-.advantage-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.advantage-item {
-  text-align: center;
-  padding: 2rem;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease;
-}
-
-.advantage-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.advantage-number {
-  font-size: 3rem;
-  color: #64ffda;
-  font-weight: bold;
-  margin-bottom: 1rem;
+      p {
+        color: #999;
+      }
+    }
+  }
 }
 
 .footer {
-  background-color: rgba(10, 25, 47, 0.95);
-  padding: 2rem 5%;
+  background: #0a0a0a;
+  padding: 30px 50px;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .footer-info {
+      color: #666;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 20px;
+
+      .social-link {
+        color: #666;
+        font-size: 20px;
+        transition: color 0.3s;
+
+        &:hover {
+          color: #409EFF;
+        }
+      }
+    }
+  }
 }
 
-.footer-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+html {
+  scroll-behavior: smooth;
+  height: 100%;
 }
 
-.footer-links {
-  display: flex;
-  gap: 1rem;
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
-.social-link {
-  color: #8892b0;
-  font-size: 1.5rem;
-  transition: color 0.3s;
+#app {
+  height: 100%;
 }
 
-.social-link:hover {
-  color: #64ffda;
+// 添加滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(64, 201, 198, 0.3);
+  border-radius: 4px;
+  
+  &:hover {
+    background: rgba(64, 201, 198, 0.5);
+  }
 }
 
 @media (max-width: 768px) {
-  .nav-center {
-    display: none;
+  .nav-bar {
+    padding: 0 20px;
+
+    .nav-links {
+      display: none;
+    }
   }
-  
-  .banner-content h1 {
-    font-size: 2rem;
+
+  section {
+    padding: 60px 20px;
+    min-height: 100vh;
   }
-  
-  .footer-content {
+
+  .banner {
+    height: 100vh;
+    margin-top: 60px;
+  }
+
+  .banner .banner-content {
+    h1 {
+      font-size: 36px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+  }
+
+  .footer .footer-content {
     flex-direction: column;
-    gap: 1rem;
+    gap: 20px;
     text-align: center;
-  }
-
-  .feature-cards {
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-  }
-
-  .advantage-items {
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-  }
-}
-
-/* 添加滚动平滑效果 */
-html {
-  scroll-behavior: smooth;
-}
-
-/* 添加动画效果 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 </style> 
