@@ -1,0 +1,9 @@
+/* 改变主题色变量 */
+$--color-primary: #3c8dbc !default; /* AdminLTE 3风格的蓝色 */
+$--color-success: #28a745 !default; /* AdminLTE 3风格的绿色 */
+$--color-warning: #ffc107 !default; /* AdminLTE 3风格的黄色 */
+$--color-danger: #dc3545 !default; /* AdminLTE 3风格的红色 */
+$--color-info: #6c757d !default; /* AdminLTE 3风格的灰色 */
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
