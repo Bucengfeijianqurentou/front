@@ -317,20 +317,135 @@
     <section id="about" class="about-us">
       <h2>关于我们</h2>
       <div class="about-content">
-        <div class="about-text">
-          <p>BlockAsset 是一个专业的区块链资产管理平台，致力于为企业和个人提供安全、透明、高效的区块链资产管理服务。</p>
-          <div class="advantages">
-            <div class="advantage-item">
-              <h4>安全可靠</h4>
-              <p>采用多重签名和冷热钱包分离技术，确保资产安全</p>
+        <div class="about-grid">
+          <!-- 公司简介 -->
+          <div class="about-card company-intro">
+            <div class="card-icon">
+              <i class="el-icon-office-building"></i>
             </div>
-            <div class="advantage-item">
-              <h4>透明公开</h4>
-              <p>所有交易记录上链，实现全程可追溯</p>
+            <h3>公司简介</h3>
+            <p>BlockAsset 成立于2023年，是一家专注于区块链资产管理的科技公司。我们致力于为企业和个人提供安全、透明、高效的区块链资产管理服务。通过持续创新和技术突破，我们已成为行业领先的区块链资产管理平台。</p>
+          </div>
+
+          <!-- 发展历程 -->
+          <div class="about-card timeline">
+            <div class="card-icon">
+              <i class="el-icon-time"></i>
             </div>
-            <div class="advantage-item">
-              <h4>便捷高效</h4>
-              <p>智能合约自动化执行，提高管理效率</p>
+            <h3>发展历程</h3>
+            <div class="timeline-items">
+              <div class="timeline-item">
+                <span class="time">2023.01</span>
+                <span class="event">公司成立</span>
+              </div>
+              <div class="timeline-item">
+                <span class="time">2023.06</span>
+                <span class="event">获得A轮融资</span>
+              </div>
+              <div class="timeline-item">
+                <span class="time">2023.09</span>
+                <span class="event">平台正式上线</span>
+              </div>
+              <div class="timeline-item">
+                <span class="time">2024.03</span>
+                <span class="event">用户规模突破10万</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 核心价值观 -->
+          <div class="about-card values">
+            <div class="card-icon">
+              <i class="el-icon-star-on"></i>
+            </div>
+            <h3>核心价值观</h3>
+            <div class="values-grid">
+              <div class="value-item">
+                <i class="el-icon-lock"></i>
+                <h4>安全至上</h4>
+                <p>以最高标准保障用户资产安全</p>
+              </div>
+              <div class="value-item">
+                <i class="el-icon-view"></i>
+                <h4>开放透明</h4>
+                <p>区块链技术确保信息公开透明</p>
+              </div>
+              <div class="value-item">
+                <i class="el-icon-magic-stick"></i>
+                <h4>持续创新</h4>
+                <p>不断探索技术前沿与应用创新</p>
+              </div>
+              <div class="value-item">
+                <i class="el-icon-user"></i>
+                <h4>用户至上</h4>
+                <p>始终以用户需求为核心</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 团队介绍 -->
+          <div class="about-card team">
+            <div class="card-icon">
+              <i class="el-icon-user"></i>
+            </div>
+            <h3>核心团队</h3>
+            <div class="team-stats">
+              <div class="stat-item">
+                <span class="number">50+</span>
+                <span class="label">技术专家</span>
+              </div>
+              <div class="stat-item">
+                <span class="number">10+</span>
+                <span class="label">博士</span>
+              </div>
+              <div class="stat-item">
+                <span class="number">20+</span>
+                <span class="label">专利</span>
+              </div>
+            </div>
+            <p class="team-desc">我们的团队来自国内外顶尖高校和知名企业，拥有丰富的区块链技术和金融领域经验。</p>
+          </div>
+
+          <!-- 资质认证 -->
+          <div class="about-card certifications">
+            <div class="card-icon">
+              <i class="el-icon-medal"></i>
+            </div>
+            <h3>资质认证</h3>
+            <div class="cert-grid">
+              <div class="cert-item">
+                <i class="el-icon-document-checked"></i>
+                <span>ISO27001信息安全认证</span>
+              </div>
+              <div class="cert-item">
+                <i class="el-icon-document-checked"></i>
+                <span>国家高新技术企业</span>
+              </div>
+              <div class="cert-item">
+                <i class="el-icon-document-checked"></i>
+                <span>区块链服务网络认证</span>
+              </div>
+              <div class="cert-item">
+                <i class="el-icon-document-checked"></i>
+                <span>金融科技创新奖</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 社会责任 -->
+          <div class="about-card responsibility">
+            <div class="card-icon">
+              <i class="el-icon-coordinate"></i>
+            </div>
+            <h3>社会责任</h3>
+            <div class="responsibility-content">
+              <p>我们积极承担社会责任，致力于：</p>
+              <ul>
+                <li>推动区块链技术在公益领域的应用</li>
+                <li>支持开源社区发展</li>
+                <li>参与区块链教育普及</li>
+                <li>践行绿色环保理念</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1748,97 +1863,170 @@ section {
 }
 
 .about-us {
-  background: rgba(42, 42, 42, 0.95);
-  min-height: 100vh;
-  scroll-snap-align: start;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #1a1f3c 0%, #0d1117 100%);
+  color: #fff;
+}
+
+.about-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 30px;
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.card-icon {
+  font-size: 2.5em;
+  color: #3699ff;
+  margin-bottom: 20px;
+}
+
+.about-card h3 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #3699ff;
+}
+
+.company-intro {
+  grid-column: span 2;
+}
+
+.company-intro p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+.timeline-items {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 120px 50px;
+  gap: 15px;
+}
 
-  h2 {
-    font-size: 42px;
-    margin-bottom: 80px;
-    color: #fff;
-    text-align: center;
-    position: relative;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 4px;
-      background: #40c9c6;
-      border-radius: 2px;
-    }
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.timeline-item .time {
+  color: #3699ff;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.value-item {
+  text-align: center;
+  padding: 15px;
+}
+
+.value-item i {
+  font-size: 2em;
+  color: #3699ff;
+  margin-bottom: 10px;
+}
+
+.value-item h4 {
+  margin: 10px 0;
+  color: #fff;
+}
+
+.team-stats {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-item .number {
+  display: block;
+  font-size: 1.8em;
+  color: #3699ff;
+  font-weight: bold;
+}
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.cert-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.cert-item i {
+  color: #3699ff;
+}
+
+.responsibility-content ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.responsibility-content li {
+  margin: 10px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.responsibility-content li:before {
+  content: "•";
+  color: #3699ff;
+  position: absolute;
+  left: 0;
+}
+
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
   }
-
-  .about-content {
-    max-width: 1200px;
-    margin: 0 auto;
-
-    .about-text {
-      text-align: center;
-      color: #fff;
-      margin-bottom: 80px;
-      
-      p {
-        font-size: 18px;
-        line-height: 1.8;
-        max-width: 800px;
-        margin: 0 auto 60px;
-      }
-    }
-
-    .advantages {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 40px;
-      padding: 0 20px;
-
-      .advantage-item {
-        background: rgba(26, 26, 26, 0.7);
-        padding: 40px;
-        border-radius: 16px;
-        text-align: center;
-        transition: all 0.3s ease;
-        border: 1px solid rgba(64, 201, 198, 0.1);
-        
-        &:hover {
-          transform: translateY(-10px);
-          border-color: rgba(64, 201, 198, 0.3);
-          box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
-        }
-
-        h4 {
-          color: #40c9c6;
-          font-size: 24px;
-          margin-bottom: 25px;
-          position: relative;
-          display: inline-block;
-          
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #40c9c6, transparent);
-          }
-        }
-
-        p {
-          color: #bbb;
-          font-size: 16px;
-          line-height: 1.8;
-          margin: 0;
-        }
-      }
-    }
+  
+  .company-intro {
+    grid-column: span 1;
+  }
+  
+  .values-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cert-grid {
+    grid-template-columns: 1fr;
   }
 }
 
