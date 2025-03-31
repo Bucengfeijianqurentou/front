@@ -142,7 +142,33 @@
     <section id="cases" class="cases">
       <h2>合作案例</h2>
       <p class="section-desc">我们为众多企业提供区块链资产管理解决方案</p>
-      <Carousel :slides="caseSlides" />
+      <div class="carousel-container">
+        <div class="carousel">
+          <div 
+            v-for="(slide, index) in caseSlides" 
+            :key="index"
+            class="case-card"
+            :data-active="currentSlide === index"
+          >
+            <img :src="slide.image" :alt="slide.title">
+            <div class="case-content">
+              <h3>{{ slide.title }}</h3>
+              <p>{{ slide.description }}</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn prev" @click="prevSlide">&lt;</button>
+        <button class="carousel-btn next" @click="nextSlide">&gt;</button>
+        <div class="carousel-indicators">
+          <span 
+            v-for="(_, index) in caseSlides" 
+            :key="'indicator-' + index"
+            class="indicator"
+            :class="{ active: currentSlide === index }"
+            @click="goToSlide(index)"
+          ></span>
+        </div>
+      </div>
     </section>
 
     <!-- 关于我们 -->
@@ -305,7 +331,8 @@ export default {
       transactionCount: '1,234,567',
       activeUsers: '45,678',
       systemPerformance: '0.023',
-      updateTimer: null
+      updateTimer: null,
+      currentSlide: 0
     }
   },
   methods: {
@@ -349,6 +376,20 @@ export default {
         this.activeUsers = (parseInt(this.activeUsers.replace(/,/g, '')) + Math.floor(Math.random() * 10)).toLocaleString();
         this.systemPerformance = (Math.random() * 0.01 + 0.02).toFixed(3);
       }, 3000);
+    },
+    prevSlide() {
+      this.currentSlide = this.currentSlide > 0 ? this.currentSlide - 1 : this.caseSlides.length - 1;
+    },
+    nextSlide() {
+      this.currentSlide = this.currentSlide < this.caseSlides.length - 1 ? this.currentSlide + 1 : 0;
+    },
+    goToSlide(index) {
+      this.currentSlide = index;
+    },
+    startAutoSlide() {
+      setInterval(() => {
+        this.nextSlide();
+      }, 5000);
     }
   },
   mounted() {
@@ -358,6 +399,7 @@ export default {
     document.querySelector('#home').classList.add('visible')
     this.initBlockchainParticles();
     this.startDataUpdate();
+    this.startAutoSlide();
   },
   beforeDestroy() {
     // 移除滚动监听
@@ -1063,6 +1105,190 @@ section {
   }
 }
 
+.cases {
+  background: rgba(26, 26, 26, 0.95);
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 50px;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 10% 10%, rgba(64, 201, 198, 0.03) 0%, transparent 30%),
+      radial-gradient(circle at 90% 90%, rgba(64, 201, 198, 0.03) 0%, transparent 30%);
+    pointer-events: none;
+  }
+
+  h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #40c9c6, #9333ea);
+      border-radius: 2px;
+    }
+  }
+
+  .section-desc {
+    text-align: center;
+    color: #bbb;
+    font-size: 18px;
+    margin-bottom: 60px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .carousel-container {
+    width: 90%;
+    max-width: 1600px;
+    margin: 0 auto;
+    position: relative;
+    
+    .carousel {
+      height: 600px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+      
+      .case-card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.6s ease;
+        transform: translateX(100%);
+        
+        &[data-active="true"] {
+          opacity: 1;
+          visibility: visible;
+          transform: translateX(0);
+        }
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s ease;
+        }
+        
+        .case-content {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 40px;
+          background: linear-gradient(to top, 
+            rgba(0, 0, 0, 0.9) 0%,
+            rgba(0, 0, 0, 0.7) 50%,
+            transparent 100%);
+          transform: translateY(0);
+          transition: transform 0.6s ease;
+          
+          h3 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            background: linear-gradient(120deg, #40c9c6, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(64, 201, 198, 0.3);
+          }
+          
+          p {
+            font-size: 18px;
+            line-height: 1.8;
+            max-width: 800px;
+            color: #fff;
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+    
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(64, 201, 198, 0.2);
+      backdrop-filter: blur(5px);
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+      
+      &.prev {
+        left: -25px;
+      }
+      
+      &.next {
+        right: -25px;
+      }
+      
+      &:hover {
+        background: rgba(64, 201, 198, 0.4);
+        transform: translateY(-50%) scale(1.1);
+      }
+    }
+    
+    .carousel-indicators {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      z-index: 2;
+      
+      .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        
+        &.active {
+          background: #40c9c6;
+          box-shadow: 0 0 10px rgba(64, 201, 198, 0.5);
+        }
+        
+        &:hover {
+          background: rgba(64, 201, 198, 0.5);
+        }
+      }
+    }
+  }
+}
+
 .about-us {
   background: rgba(42, 42, 42, 0.95);
   min-height: 100vh;
@@ -1195,48 +1421,6 @@ section {
         color: #999;
       }
     }
-  }
-}
-
-.cases {
-  background: rgba(26, 26, 26, 0.95);
-  min-height: 100vh;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 120px 50px;
-  position: relative;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-      radial-gradient(circle at 10% 10%, rgba(64, 201, 198, 0.03) 0%, transparent 30%),
-      radial-gradient(circle at 90% 90%, rgba(64, 201, 198, 0.03) 0%, transparent 30%);
-    pointer-events: none;
-  }
-
-  h2 {
-    font-size: 42px;
-    margin-bottom: 20px;
-    color: #fff;
-    text-align: center;
-    position: relative;
-  }
-
-  .section-desc {
-    text-align: center;
-    color: #bbb;
-    font-size: 18px;
-    margin-bottom: 60px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -1380,46 +1564,44 @@ body {
   }
 
   .cases {
-    padding: 80px 20px;
+    padding: 60px 20px;
 
     h2 {
       font-size: 32px;
-      margin-bottom: 15px;
     }
-
+    
     .section-desc {
       font-size: 16px;
       margin-bottom: 40px;
     }
-  }
-
-  .features {
-    padding: 60px 20px;
-
-    .feature-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-
-      .feature-card {
-        padding: 20px;
-
-        .feature-icon i {
-          font-size: 32px;
-        }
-
-        .feature-content {
+    
+    .carousel-container {
+      width: 95%;
+      
+      .carousel {
+        height: 400px;
+      }
+      
+      .case-card {
+        .case-content {
+          padding: 25px;
+          
           h3 {
-            font-size: 18px;
+            font-size: 24px;
+            margin-bottom: 15px;
           }
-
-          .feature-desc {
-            font-size: 13px;
-          }
-
-          .feature-list li {
-            font-size: 12px;
+          
+          p {
+            font-size: 14px;
+            line-height: 1.6;
           }
         }
+      }
+      
+      .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
       }
     }
   }
@@ -1441,8 +1623,28 @@ body {
 }
 
 @media (max-width: 1200px) {
-  .features .feature-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .cases {
+    padding: 80px 30px;
+    
+    .carousel-container {
+      .carousel {
+        height: 500px;
+      }
+      
+      .case-card {
+        .case-content {
+          padding: 30px;
+          
+          h3 {
+            font-size: 28px;
+          }
+          
+          p {
+            font-size: 16px;
+          }
+        }
+      }
+    }
   }
 }
 
