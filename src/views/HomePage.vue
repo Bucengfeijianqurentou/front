@@ -7,6 +7,7 @@
         <a href="#home" class="nav-link">首页</a>
         <a href="#features" class="nav-link">核心功能</a>
         <a href="#technology" class="nav-link">技术优势</a>
+        <a href="#live-data" class="nav-link">实时数据</a>
         <a href="#cases" class="nav-link">合作案例</a>
         <a href="#about" class="nav-link">关于我们</a>
         <a href="#contact" class="nav-link">联系我们</a>
@@ -129,29 +130,139 @@
       </div>
     </section>
 
-    <!-- 新增：实时数据 -->
+    <!-- 实时数据部分的更新 -->
     <section id="live-data" class="live-data">
       <h2>实时数据</h2>
-      <div class="data-grid">
-        <div class="data-card">
-          <h3>当前链上交易</h3>
-          <div class="data-value">{{transactionCount}}</div>
-          <div class="data-chart">
-            <!-- 这里可以添加echarts图表 -->
+      <div class="data-overview">
+        <div class="data-column left-column">
+          <div class="data-row highlight">
+            <div class="data-label">
+              <i class="el-icon-money"></i>
+              <span>总资产规模</span>
+            </div>
+            <div class="data-number">¥ 128.5B</div>
+            <div class="data-trend positive">
+              <i class="el-icon-top"></i>
+              <span>+2.5%</span>
+            </div>
+            <div class="data-description">
+              <p>平台管理的总资产规模持续增长</p>
+              <div class="trend-chart">
+                <!-- 这里可以添加一个简单的趋势图 -->
+                <div class="chart-bar" style="height: 20%"></div>
+                <div class="chart-bar" style="height: 40%"></div>
+                <div class="chart-bar" style="height: 30%"></div>
+                <div class="chart-bar" style="height: 60%"></div>
+                <div class="chart-bar" style="height: 50%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">
+              <i class="el-icon-document"></i>
+              <span>智能合约数量</span>
+            </div>
+            <div class="data-number">25,431</div>
+            <div class="data-trend positive">
+              <i class="el-icon-top"></i>
+              <span>+156</span>
+            </div>
+            <div class="data-description">
+              <p>已部署的智能合约总数</p>
+              <div class="contract-types">
+                <span>DeFi合约: 12,345</span>
+                <span>资产管理: 8,642</span>
+                <span>其他: 4,444</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="data-card">
-          <h3>活跃用户数</h3>
-          <div class="data-value">{{activeUsers}}</div>
-          <div class="data-chart">
-            <!-- 这里可以添加echarts图表 -->
+        
+        <div class="data-column center-column">
+          <div class="chain-status">
+            <div class="status-ring">
+              <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" class="ring-bg"/>
+                <circle cx="50" cy="50" r="45" class="ring-progress" :style="{ 'stroke-dashoffset': 283 * (1 - 0.9986) }"/>
+              </svg>
+              <div class="status-content">
+                <div class="status-number">99.86%</div>
+                <div class="status-label">链上运行状态</div>
+              </div>
+            </div>
+            <div class="current-stats">
+              <div class="stat-item">
+                <div class="stat-value">{{transactionCount}}</div>
+                <div class="stat-label">当前链上交易</div>
+                <div class="stat-detail">每秒处理约 3,000+ 笔交易</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">{{systemPerformance}}ms</div>
+                <div class="stat-label">系统响应时间</div>
+                <div class="stat-detail">全球平均网络延迟</div>
+              </div>
+            </div>
+            <div class="network-stats">
+              <div class="network-item">
+                <span class="label">节点数量</span>
+                <span class="value">1,234</span>
+              </div>
+              <div class="network-item">
+                <span class="label">网络带宽</span>
+                <span class="value">10 Gbps</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="data-card">
-          <h3>系统性能</h3>
-          <div class="data-value">{{systemPerformance}}ms</div>
-          <div class="data-chart">
-            <!-- 这里可以添加echarts图表 -->
+        
+        <div class="data-column right-column">
+          <div class="data-row">
+            <div class="data-label">
+              <i class="el-icon-user"></i>
+              <span>活跃用户数</span>
+            </div>
+            <div class="data-number">{{activeUsers}}</div>
+            <div class="data-trend positive">
+              <i class="el-icon-top"></i>
+              <span>+12.3%</span>
+            </div>
+            <div class="data-description">
+              <p>近24小时活跃用户统计</p>
+              <div class="user-distribution">
+                <div class="dist-item">
+                  <span class="label">个人用户</span>
+                  <span class="value">65%</span>
+                </div>
+                <div class="dist-item">
+                  <span class="label">企业用户</span>
+                  <span class="value">35%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="data-row">
+            <div class="data-label">
+              <i class="el-icon-time"></i>
+              <span>平均确认时间</span>
+            </div>
+            <div class="data-number">1.2s</div>
+            <div class="data-trend negative">
+              <i class="el-icon-bottom"></i>
+              <span>-0.3s</span>
+            </div>
+            <div class="data-description">
+              <p>交易确认效率持续提升</p>
+              <div class="performance-metrics">
+                <div class="metric">
+                  <span class="label">最快确认</span>
+                  <span class="value">0.8s</span>
+                </div>
+                <div class="metric">
+                  <span class="label">最慢确认</span>
+                  <span class="value">2.1s</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1082,34 +1193,315 @@ section {
 .live-data {
   background: rgba(26, 26, 26, 0.95);
   padding: 100px 50px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
 
-  .data-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, 
+      transparent,
+      rgba(64, 201, 198, 0.2),
+      rgba(147, 51, 234, 0.2),
+      transparent
+    );
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 42px;
+    margin-bottom: 60px;
+    color: #fff;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #40c9c6, #9333ea);
+      border-radius: 2px;
+    }
+  }
+
+  .data-overview {
+    display: flex;
+    justify-content: space-between;
     gap: 30px;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
+    padding: 20px;
 
-    .data-card {
+    .data-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+
+      &.center-column {
+        flex: 1.2;
+      }
+    }
+
+    .data-row {
       background: rgba(38, 38, 38, 0.7);
-      padding: 30px;
       border-radius: 16px;
-      text-align: center;
+      padding: 30px;
+      border: 1px solid rgba(64, 201, 198, 0.1);
+      transition: all 0.3s ease;
+      min-height: 250px;
 
-      h3 {
-        color: #fff;
+      &:hover {
+        border-color: rgba(64, 201, 198, 0.3);
+        box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
+        transform: translateY(-5px);
+      }
+
+      &.highlight {
+        background: linear-gradient(135deg, rgba(64, 201, 198, 0.1), rgba(147, 51, 234, 0.1));
+      }
+
+      .data-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #bbb;
+        margin-bottom: 20px;
+
+        i {
+          color: #40c9c6;
+          font-size: 24px;
+        }
+
+        span {
+          font-size: 18px;
+        }
+      }
+
+      .data-number {
+        font-size: 42px;
+        font-weight: bold;
+        background: linear-gradient(120deg, #40c9c6, #9333ea);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
         margin-bottom: 15px;
       }
 
-      .data-value {
-        font-size: 36px;
-        color: #40c9c6;
+      .data-trend {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
         margin-bottom: 20px;
+
+        &.positive {
+          color: #67C23A;
+        }
+
+        &.negative {
+          color: #F56C6C;
+        }
+
+        i {
+          font-size: 14px;
+        }
       }
 
-      .data-chart {
-        height: 150px;
-        // 这里可以添加图表样式
+      .data-description {
+        margin-top: 20px;
+        
+        p {
+          color: #bbb;
+          font-size: 16px;
+          margin-bottom: 15px;
+        }
+
+        .trend-chart {
+          display: flex;
+          align-items: flex-end;
+          gap: 8px;
+          height: 60px;
+          margin-top: 20px;
+
+          .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, #40c9c6, #9333ea);
+            border-radius: 2px;
+            transition: height 0.3s ease;
+          }
+        }
+
+        .contract-types {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 15px;
+
+          span {
+            color: #bbb;
+            font-size: 14px;
+            padding: 8px;
+            background: rgba(64, 201, 198, 0.1);
+            border-radius: 4px;
+          }
+        }
+
+        .user-distribution, .performance-metrics {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+          margin-top: 15px;
+
+          .dist-item, .metric {
+            background: rgba(64, 201, 198, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+
+            .label {
+              display: block;
+              color: #bbb;
+              font-size: 14px;
+              margin-bottom: 5px;
+            }
+
+            .value {
+              color: #40c9c6;
+              font-size: 18px;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+
+    .chain-status {
+      background: rgba(38, 38, 38, 0.7);
+      border-radius: 16px;
+      padding: 40px;
+      border: 1px solid rgba(64, 201, 198, 0.1);
+      height: calc(100% - 80px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        border-color: rgba(64, 201, 198, 0.3);
+        box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
+        transform: translateY(-5px);
+      }
+
+      .status-ring {
+        position: relative;
+        width: 220px;
+        height: 220px;
+
+        svg {
+          transform: rotate(-90deg);
+          
+          circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            
+            &.ring-bg {
+              stroke: rgba(255, 255, 255, 0.1);
+            }
+            
+            &.ring-progress {
+              stroke: url(#gradient);
+              stroke-dasharray: 283;
+              transition: stroke-dashoffset 1s ease;
+            }
+          }
+        }
+
+        .status-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          text-align: center;
+
+          .status-number {
+            font-size: 42px;
+            font-weight: bold;
+            background: linear-gradient(120deg, #40c9c6, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          }
+
+          .status-label {
+            color: #bbb;
+            font-size: 16px;
+            margin-top: 8px;
+          }
+        }
+      }
+
+      .current-stats {
+        display: flex;
+        gap: 40px;
+        width: 100%;
+        padding: 20px 0;
+        border-top: 1px solid rgba(64, 201, 198, 0.1);
+        border-bottom: 1px solid rgba(64, 201, 198, 0.1);
+
+        .stat-item {
+          flex: 1;
+          text-align: center;
+
+          .stat-value {
+            font-size: 28px;
+            color: #40c9c6;
+            margin-bottom: 8px;
+          }
+
+          .stat-label {
+            color: #bbb;
+            font-size: 16px;
+            margin-bottom: 5px;
+          }
+
+          .stat-detail {
+            color: #666;
+            font-size: 14px;
+          }
+        }
+      }
+
+      .network-stats {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        
+        .network-item {
+          text-align: center;
+          
+          .label {
+            display: block;
+            color: #bbb;
+            font-size: 14px;
+            margin-bottom: 5px;
+          }
+          
+          .value {
+            color: #40c9c6;
+            font-size: 20px;
+            font-weight: bold;
+          }
+        }
       }
     }
   }
@@ -1677,7 +2069,7 @@ body {
     gap: 20px;
   }
 
-  .tech-grid, .data-grid {
+  .tech-grid, .data-overview {
     grid-template-columns: 1fr;
   }
 
