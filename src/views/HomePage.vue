@@ -728,19 +728,21 @@ section {
     }
 
     .btn-start {
-      padding: 12px 30px;
+      padding: 15px 40px;
       font-size: 18px;
       background: linear-gradient(45deg, #40c9c6, #9333ea);
       border: none;
-      border-radius: 25px;
+      border-radius: 4px;
       color: #fff;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
       position: relative;
       overflow: hidden;
       opacity: 0;
       animation: fadeInUp 1s ease forwards 1.5s;
       box-shadow: 0 4px 15px rgba(64, 201, 198, 0.2);
+      letter-spacing: 1px;
+      font-weight: 500;
 
       &::before {
         content: '';
@@ -755,15 +757,16 @@ section {
           rgba(255, 255, 255, 0.3),
           transparent
         );
-        transition: 0.5s ease;
+        transition: 0.6s ease;
       }
 
       &:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px) scale(1.02);
         box-shadow: 
-          0 6px 20px rgba(64, 201, 198, 0.3),
-          0 2px 10px rgba(147, 51, 234, 0.2);
+          0 8px 25px rgba(64, 201, 198, 0.4),
+          0 4px 15px rgba(147, 51, 234, 0.3);
         background: linear-gradient(45deg, #9333ea, #40c9c6);
+        letter-spacing: 2px;
 
         &::before {
           left: 100%;
@@ -771,7 +774,7 @@ section {
       }
 
       &:active {
-        transform: translateY(1px);
+        transform: translateY(1px) scale(0.98);
         box-shadow: 
           0 2px 10px rgba(64, 201, 198, 0.2),
           0 1px 5px rgba(147, 51, 234, 0.1);
