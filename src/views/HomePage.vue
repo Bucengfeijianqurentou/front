@@ -790,27 +790,30 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 100px 50px;
+  padding: 80px 50px;
 
   .feature-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
 
     .feature-card {
       background: rgba(26, 26, 26, 0.7);
-      border-radius: 16px;
-      padding: 30px;
+      border-radius: 12px;
+      padding: 25px;
       transition: all 0.4s ease;
       border: 1px solid rgba(64, 201, 198, 0.1);
       position: relative;
       overflow: hidden;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
 
       &:hover {
-        transform: translateY(-10px);
+        transform: translateY(-5px);
         border-color: rgba(64, 201, 198, 0.3);
         box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
 
@@ -837,30 +840,34 @@ section {
       }
 
       .feature-icon {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         
         i {
-          font-size: 48px;
+          font-size: 36px;
           color: #40c9c6;
           transition: all 0.4s ease;
         }
       }
 
       .feature-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
         h3 {
           color: #fff;
-          font-size: 24px;
-          margin-bottom: 15px;
+          font-size: 20px;
+          margin-bottom: 10px;
           position: relative;
-          padding-bottom: 15px;
+          padding-bottom: 10px;
 
           &::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 40px;
-            height: 3px;
+            width: 30px;
+            height: 2px;
             background: #40c9c6;
             border-radius: 2px;
           }
@@ -868,9 +875,9 @@ section {
 
         .feature-desc {
           color: #bbb;
-          font-size: 16px;
-          line-height: 1.6;
-          margin-bottom: 20px;
+          font-size: 14px;
+          line-height: 1.5;
+          margin-bottom: 15px;
         }
 
         .feature-list {
@@ -880,9 +887,9 @@ section {
 
           li {
             color: #999;
-            font-size: 14px;
-            margin-bottom: 10px;
-            padding-left: 20px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            padding-left: 16px;
             position: relative;
 
             &::before {
@@ -890,7 +897,7 @@ section {
               color: #40c9c6;
               position: absolute;
               left: 0;
-              font-size: 18px;
+              font-size: 16px;
               line-height: 1;
             }
 
@@ -1391,26 +1398,26 @@ body {
 
     .feature-grid {
       grid-template-columns: 1fr;
-      gap: 30px;
+      gap: 20px;
 
       .feature-card {
-        padding: 25px;
+        padding: 20px;
 
         .feature-icon i {
-          font-size: 36px;
+          font-size: 32px;
         }
 
         .feature-content {
           h3 {
-            font-size: 20px;
+            font-size: 18px;
           }
 
           .feature-desc {
-            font-size: 14px;
+            font-size: 13px;
           }
 
           .feature-list li {
-            font-size: 13px;
+            font-size: 12px;
           }
         }
       }
@@ -1430,6 +1437,12 @@ body {
     &::before, &::after {
       width: 50px;
     }
+  }
+}
+
+@media (max-width: 1200px) {
+  .features .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
