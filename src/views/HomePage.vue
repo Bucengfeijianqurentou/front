@@ -487,6 +487,33 @@
         </div>
       </div>
     </footer>
+
+    <!-- 在 banner-section 部分的结尾添加实时交易信息展示组件 -->
+    <div class="live-transactions">
+      <div class="transaction-header">
+        <i class="el-icon-connection"></i>
+        <span>实时交易动态</span>
+      </div>
+      <div class="transaction-list" ref="transactionList">
+        <div v-for="(tx, index) in transactions" 
+             :key="index" 
+             class="transaction-item"
+             :class="{ 'fade-in': tx.isNew }">
+          <div class="tx-icon">
+            <i class="el-icon-finished"></i>
+          </div>
+          <div class="tx-info">
+            <div class="tx-hash">
+              交易哈希: <span class="hash">{{ tx.hash }}</span>
+            </div>
+            <div class="tx-details">
+              <span class="time">{{ tx.time }}</span>
+              <span class="status" :class="tx.status">{{ tx.statusText }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -589,7 +616,25 @@ export default {
       activeUsers: '45,678',
       systemPerformance: '0.023',
       updateTimer: null,
-      currentSlide: 0
+      currentSlide: 0,
+      transactions: [],
+      maxTransactions: 5,
+      mockTransactions: [
+        {
+          hash: '0x7d12f8d3b54c82d9c882817a87c926c2',
+          time: '2024-03-15 10:30:22',
+          status: 'success',
+          statusText: '已确认',
+          isNew: false
+        },
+        {
+          hash: '0x9e45a2c1f8b7d6e3a4c5b2d1e9f8c7b6',
+          time: '2024-03-15 10:29:15',
+          status: 'pending',
+          statusText: '确认中',
+          isNew: false
+        }
+      ]
     }
   },
   methods: {
@@ -647,6 +692,47 @@ export default {
       setInterval(() => {
         this.nextSlide();
       }, 5000);
+    },
+    // 生成模拟交易数据
+    generateMockTransaction() {
+      const hash = '0x' + Math.random().toString(16).substr(2, 40);
+      const now = new Date();
+      const time = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+      const status = Math.random() > 0.3 ? 'success' : 'pending';
+      
+      return {
+        hash,
+        time,
+        status,
+        statusText: status === 'success' ? '已确认' : '确认中',
+        isNew: true
+      };
+    },
+    
+    // 添加新交易
+    addNewTransaction() {
+      const newTx = this.generateMockTransaction();
+      this.transactions.unshift(newTx);
+      
+      // 限制显示条数
+      if (this.transactions.length > this.maxTransactions) {
+        this.transactions.pop();
+      }
+      
+      // 3秒后移除新交易的高亮效果
+      setTimeout(() => {
+        newTx.isNew = false;
+      }, 3000);
+    },
+    
+    // 初始化交易列表
+    initTransactions() {
+      this.transactions = [...this.mockTransactions];
+      
+      // 每隔几秒添加一条新交易
+      setInterval(() => {
+        this.addNewTransaction();
+      }, 5000);
     }
   },
   mounted() {
@@ -657,6 +743,7 @@ export default {
     this.initBlockchainParticles();
     this.startDataUpdate();
     this.startAutoSlide();
+    this.initTransactions();
   },
   beforeDestroy() {
     // 移除滚动监听
@@ -2349,6 +2436,136 @@ body {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+
+.live-transactions {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 400px;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  
+  @media (max-width: 768px) {
+    width: calc(100% - 40px);
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+  }
+}
+
+.transaction-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #40c9c6;
+  font-size: 16px;
+  
+  i {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+}
+
+.transaction-list {
+  max-height: 300px;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(64, 201, 198, 0.3);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.transaction-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &.fade-in {
+    animation: fadeIn 0.5s ease;
+    background: rgba(64, 201, 198, 0.1);
+  }
+}
+
+.tx-icon {
+  margin-right: 12px;
+  color: #40c9c6;
+  
+  i {
+    font-size: 20px;
+  }
+}
+
+.tx-info {
+  flex: 1;
+}
+
+.tx-hash {
+  color: #a8b6c3;
+  font-size: 14px;
+  margin-bottom: 4px;
+  
+  .hash {
+    color: #40c9c6;
+    font-family: monospace;
+  }
+}
+
+.tx-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  
+  .time {
+    color: #666;
+  }
+  
+  .status {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    
+    &.success {
+      background: rgba(39, 174, 96, 0.2);
+      color: #27ae60;
+    }
+    
+    &.pending {
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style> 
