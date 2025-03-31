@@ -6,6 +6,7 @@
       <div class="nav-links">
         <a href="#home" class="nav-link">首页</a>
         <a href="#features" class="nav-link">核心功能</a>
+        <a href="#technology" class="nav-link">技术优势</a>
         <a href="#cases" class="nav-link">合作案例</a>
         <a href="#about" class="nav-link">关于我们</a>
         <a href="#contact" class="nav-link">联系我们</a>
@@ -93,6 +94,36 @@
           <p>创新的DPOS共识算法</p>
           <div class="tech-progress">
             <div class="progress-bar" style="width: 85%"></div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-data-analysis"></i>
+          </div>
+          <h3>智能分析</h3>
+          <p>AI驱动的资产分析引擎</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 88%"></div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-refresh"></i>
+          </div>
+          <h3>高可用性</h3>
+          <p>99.99%系统可用率</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 92%"></div>
+          </div>
+        </div>
+        <div class="tech-item">
+          <div class="tech-icon">
+            <i class="el-icon-monitor"></i>
+          </div>
+          <h3>实时监控</h3>
+          <p>全链路追踪与监控</p>
+          <div class="tech-progress">
+            <div class="progress-bar" style="width: 87%"></div>
           </div>
         </div>
       </div>
@@ -958,6 +989,27 @@ section {
 .technology {
   background: rgba(26, 26, 26, 0.95);
   padding: 100px 50px;
+  margin-top: -50px; // 减少与核心功能的间距
+
+  h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 50px;
+    color: #fff;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #40c9c6, #9333ea);
+      border-radius: 2px;
+    }
+  }
 
   .tech-grid {
     display: grid;
@@ -971,13 +1023,21 @@ section {
       padding: 30px;
       border-radius: 16px;
       text-align: center;
-      transition: transform 0.3s ease;
-
+      transition: all 0.4s ease;
+      border: 1px solid rgba(64, 201, 198, 0.1);
+      
       &:hover {
         transform: translateY(-10px);
+        border-color: rgba(64, 201, 198, 0.3);
+        box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
 
         .tech-progress .progress-bar {
           width: 100% !important;
+        }
+
+        .tech-icon i {
+          transform: scale(1.1);
+          color: #40c9c6;
         }
       }
 
@@ -985,16 +1045,22 @@ section {
         font-size: 48px;
         color: #40c9c6;
         margin-bottom: 20px;
+        
+        i {
+          transition: all 0.4s ease;
+        }
       }
 
       h3 {
         color: #fff;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 24px;
       }
 
       p {
         color: #bbb;
         margin-bottom: 20px;
+        font-size: 16px;
       }
 
       .tech-progress {
