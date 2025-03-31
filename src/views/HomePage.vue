@@ -5,7 +5,8 @@
       <div class="logo">BlockAsset</div>
       <div class="nav-links">
         <a href="#home" class="nav-link">首页</a>
-        <a href="#features" class="nav-link">功能</a>
+        <a href="#features" class="nav-link">核心功能</a>
+        <a href="#cases" class="nav-link">合作案例</a>
         <a href="#about" class="nav-link">关于我们</a>
         <a href="#contact" class="nav-link">联系我们</a>
       </div>
@@ -34,6 +35,13 @@
           <p>{{ feature.description }}</p>
         </div>
       </div>
+    </section>
+
+    <!-- 合作案例 -->
+    <section id="cases" class="cases">
+      <h2>合作案例</h2>
+      <p class="section-desc">我们为众多企业提供区块链资产管理解决方案</p>
+      <Carousel :slides="caseSlides" />
     </section>
 
     <!-- 关于我们 -->
@@ -99,8 +107,13 @@
 </template>
 
 <script>
+import Carousel from '@/components/Carousel.vue'
+
 export default {
   name: 'HomePage',
+  components: {
+    Carousel
+  },
   data() {
     return {
       features: [
@@ -123,6 +136,23 @@ export default {
           icon: 'el-icon-data-line',
           title: '数据分析',
           description: '专业的数据分析和可视化报表'
+        }
+      ],
+      caseSlides: [
+        {
+          image: require('@/assets/images/case1.jpg'),
+          title: '某大型金融机构资产数字化项目',
+          description: '为客户提供完整的区块链资产管理解决方案，实现资产全生命周期的透明化管理'
+        },
+        {
+          image: require('@/assets/images/case2.jpg'),
+          title: '跨境贸易区块链平台',
+          description: '打造基于区块链的跨境贸易平台，提高贸易效率，降低信任成本'
+        },
+        {
+          image: require('@/assets/images/case3.jpg'),
+          title: '供应链金融区块链项目',
+          description: '运用区块链技术重构供应链金融业务流程，实现资产可追溯、不可篡改'
         }
       ]
     }
@@ -440,36 +470,88 @@ section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 100px 50px;
+  padding: 120px 50px;
+
+  h2 {
+    font-size: 42px;
+    margin-bottom: 80px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #40c9c6;
+      border-radius: 2px;
+    }
+  }
 
   .about-content {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
 
     .about-text {
       text-align: center;
       color: #fff;
-      margin-bottom: 50px;
+      margin-bottom: 80px;
+      
+      p {
+        font-size: 18px;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: 0 auto 60px;
+      }
     }
 
     .advantages {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      padding: 0 20px;
 
       .advantage-item {
-        background: #1a1a1a;
-        padding: 30px;
-        border-radius: 10px;
+        background: rgba(26, 26, 26, 0.7);
+        padding: 40px;
+        border-radius: 16px;
         text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(64, 201, 198, 0.1);
+        
+        &:hover {
+          transform: translateY(-10px);
+          border-color: rgba(64, 201, 198, 0.3);
+          box-shadow: 0 10px 30px rgba(64, 201, 198, 0.1);
+        }
 
         h4 {
-          color: #409EFF;
-          margin-bottom: 15px;
+          color: #40c9c6;
+          font-size: 24px;
+          margin-bottom: 25px;
+          position: relative;
+          display: inline-block;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #40c9c6, transparent);
+          }
         }
 
         p {
-          color: #999;
+          color: #bbb;
+          font-size: 16px;
+          line-height: 1.8;
+          margin: 0;
         }
       }
     }
@@ -513,6 +595,48 @@ section {
         color: #999;
       }
     }
+  }
+}
+
+.cases {
+  background: rgba(26, 26, 26, 0.95);
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 50px;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 10% 10%, rgba(64, 201, 198, 0.03) 0%, transparent 30%),
+      radial-gradient(circle at 90% 90%, rgba(64, 201, 198, 0.03) 0%, transparent 30%);
+    pointer-events: none;
+  }
+
+  h2 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+  }
+
+  .section-desc {
+    text-align: center;
+    color: #bbb;
+    font-size: 18px;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -615,6 +739,58 @@ body {
     flex-direction: column;
     gap: 20px;
     text-align: center;
+  }
+
+  .about-us {
+    padding: 80px 20px;
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 60px;
+    }
+
+    .about-content {
+      .about-text {
+        margin-bottom: 60px;
+        
+        p {
+          font-size: 16px;
+          margin-bottom: 40px;
+        }
+      }
+
+      .advantages {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        
+        .advantage-item {
+          padding: 30px;
+          
+          h4 {
+            font-size: 20px;
+            margin-bottom: 20px;
+          }
+          
+          p {
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .cases {
+    padding: 80px 20px;
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 15px;
+    }
+
+    .section-desc {
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
   }
 }
 </style> 
