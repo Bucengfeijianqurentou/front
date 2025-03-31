@@ -488,31 +488,18 @@
       </div>
     </footer>
 
-    <!-- 在 banner-section 部分的结尾添加实时交易信息展示组件 -->
-    <div class="live-transactions">
-      <div class="transaction-header">
-        <i class="el-icon-connection"></i>
-        <span>实时交易动态</span>
-      </div>
-      <div class="transaction-list" ref="transactionList">
-        <div v-for="(tx, index) in transactions" 
-             :key="index" 
+    <!-- 修改实时交易动态展示部分 -->
+    <div class="floating-transactions">
+      <transition-group name="slide" tag="div" class="transaction-list">
+        <div v-for="tx in visibleTransactions" 
+             :key="tx.id"
              class="transaction-item"
-             :class="{ 'fade-in': tx.isNew }">
-          <div class="tx-icon">
-            <i class="el-icon-finished"></i>
-          </div>
-          <div class="tx-info">
-            <div class="tx-hash">
-              交易哈希: <span class="hash">{{ tx.hash }}</span>
-            </div>
-            <div class="tx-details">
-              <span class="time">{{ tx.time }}</span>
-              <span class="status" :class="tx.status">{{ tx.statusText }}</span>
-            </div>
-          </div>
+             :class="{ 'slide-up': tx.isNew }">
+          <i class="el-icon-connection"></i>
+          <span class="hash">{{ tx.hash }}</span>
+          <span class="status" :class="tx.status">{{ tx.statusText }}</span>
         </div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -617,8 +604,9 @@ export default {
       systemPerformance: '0.023',
       updateTimer: null,
       currentSlide: 0,
-      transactions: [],
-      maxTransactions: 5,
+      transactions: [], // 存储所有交易
+      maxVisibleTransactions: 5, // 最大显示数量
+      transactionCounter: 0, // 用于生成唯一ID
       mockTransactions: [
         {
           hash: '0x7d12f8d3b54c82d9c882817a87c926c2',
@@ -634,7 +622,19 @@ export default {
           statusText: '确认中',
           isNew: false
         }
-      ]
+      ],
+      currentTransaction: {
+        hash: '',
+        status: 'success',
+        statusText: '已确认',
+        isNew: false
+      }
+    }
+  },
+  computed: {
+    visibleTransactions() {
+      // 只显示最新的几条交易
+      return this.transactions.slice(-this.maxVisibleTransactions);
     }
   },
   methods: {
@@ -693,45 +693,48 @@ export default {
         this.nextSlide();
       }, 5000);
     },
-    // 生成模拟交易数据
+    // 修改生成交易数据的方法
     generateMockTransaction() {
+      this.transactionCounter++;
       const hash = '0x' + Math.random().toString(16).substr(2, 40);
-      const now = new Date();
-      const time = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
       const status = Math.random() > 0.3 ? 'success' : 'pending';
       
       return {
+        id: this.transactionCounter, // 添加唯一ID
         hash,
-        time,
         status,
         statusText: status === 'success' ? '已确认' : '确认中',
         isNew: true
       };
     },
     
-    // 添加新交易
-    addNewTransaction() {
+    // 更新交易列表
+    updateTransactions() {
       const newTx = this.generateMockTransaction();
-      this.transactions.unshift(newTx);
+      this.transactions.push(newTx);
       
-      // 限制显示条数
-      if (this.transactions.length > this.maxTransactions) {
-        this.transactions.pop();
-      }
-      
-      // 3秒后移除新交易的高亮效果
+      // 3秒后移除新交易的动画效果
       setTimeout(() => {
-        newTx.isNew = false;
+        const index = this.transactions.findIndex(tx => tx.id === newTx.id);
+        if (index !== -1) {
+          this.transactions[index].isNew = false;
+        }
       }, 3000);
+      
+      // 如果超过最大显示数量的2倍，删除旧的交易记录以节省内存
+      if (this.transactions.length > this.maxVisibleTransactions * 2) {
+        this.transactions = this.transactions.slice(-this.maxVisibleTransactions * 2);
+      }
     },
     
-    // 初始化交易列表
+    // 初始化交易更新
     initTransactions() {
-      this.transactions = [...this.mockTransactions];
+      // 立即添加第一条交易
+      this.updateTransactions();
       
       // 每隔几秒添加一条新交易
       setInterval(() => {
-        this.addNewTransaction();
+        this.updateTransactions();
       }, 5000);
     }
   },
@@ -2439,112 +2442,48 @@ body {
   }
 }
 
-.live-transactions {
+.floating-transactions {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 400px;
-  background: rgba(13, 17, 23, 0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  
-  @media (max-width: 768px) {
-    width: calc(100% - 40px);
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-  }
-}
-
-.transaction-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15px;
-  color: #40c9c6;
-  font-size: 16px;
-  
-  i {
-    margin-right: 8px;
-    font-size: 18px;
-  }
+  pointer-events: none;
+  max-width: 400px;
 }
 
 .transaction-list {
-  max-height: 300px;
-  overflow-y: auto;
-  
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: rgba(64, 201, 198, 0.3);
-    border-radius: 3px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .transaction-item {
   display: flex;
-  align-items: flex-start;
-  padding: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  
-  &:last-child {
-    border-bottom: none;
-  }
-  
-  &.fade-in {
-    animation: fadeIn 0.5s ease;
-    background: rgba(64, 201, 198, 0.1);
-  }
-}
-
-.tx-icon {
-  margin-right: 12px;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   color: #40c9c6;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  opacity: 0.8;
   
   i {
-    font-size: 20px;
+    font-size: 16px;
   }
-}
-
-.tx-info {
-  flex: 1;
-}
-
-.tx-hash {
-  color: #a8b6c3;
-  font-size: 14px;
-  margin-bottom: 4px;
   
   .hash {
-    color: #40c9c6;
     font-family: monospace;
-  }
-}
-
-.tx-details {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  
-  .time {
-    color: #666;
+    color: #a8b6c3;
   }
   
   .status {
     padding: 2px 8px;
     border-radius: 10px;
     font-size: 12px;
+    white-space: nowrap;
     
     &.success {
       background: rgba(39, 174, 96, 0.2);
@@ -2558,14 +2497,35 @@ body {
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+// 添加 Vue transition-group 动画
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.slide-move {
+  transition: transform 0.5s ease;
+}
+
+@media (max-width: 768px) {
+  .floating-transactions {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    max-width: none;
+    
+    .transaction-item {
+      justify-content: center;
+    }
   }
 }
 </style> 
