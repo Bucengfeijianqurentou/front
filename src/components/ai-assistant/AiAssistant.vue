@@ -123,9 +123,11 @@ export default {
     async sendMessage() {
       if (!this.userInput.trim() || this.isTyping) return
       
+      const userQuestion = this.userInput.trim()
+      
       // 添加用户消息
       this.messages.push({
-        content: this.userInput,
+        content: userQuestion,
         type: 'user'
       })
       
@@ -136,13 +138,24 @@ export default {
       // 模拟思考时间
       await this.simulateThinking()
       
-      // 添加默认回复
-      this.messages.push({
-        content: '抱歉，我目前只能回答预设的问题。请从下面的问题中选择：',
-        type: 'assistant'
-      })
+      // 尝试匹配预设问题
+      const matchedQuestion = this.findMatchingQuestion(userQuestion)
       
-      this.showPresetQuestions = true
+      if (matchedQuestion) {
+        // 如果找到匹配的预设问题，显示对应答案
+        this.messages.push({
+          content: matchedQuestion.answer,
+          type: 'assistant'
+        })
+      } else {
+        // 如果没有找到匹配的问题，显示默认回复
+        this.messages.push({
+          content: '抱歉，我目前只能回答预设的问题。请从下面的问题中选择：',
+          type: 'assistant'
+        })
+        this.showPresetQuestions = true
+      }
+      
       this.scrollToBottom()
     },
     handleQuestionClick(question) {
@@ -200,6 +213,23 @@ export default {
         if (container) {
           container.scrollTop = container.scrollHeight
         }
+      })
+    },
+    // 添加模糊匹配方法
+    findMatchingQuestion(userInput) {
+      // 将用户输入转换为小写，并移除标点符号
+      const normalizedInput = userInput.toLowerCase().replace(/[.,?!，。？！]/g, '')
+      
+      // 遍历预设问题，查找最佳匹配
+      return this.presetQuestions.find(q => {
+        const normalizedQuestion = q.question.toLowerCase().replace(/[.,?!，。？！]/g, '')
+        // 检查用户输入是否包含问题关键词，或问题是否包含用户输入
+        return normalizedQuestion.includes(normalizedInput) || 
+               normalizedInput.includes(normalizedQuestion) ||
+               // 特殊匹配："如何借用资产" 可以匹配 "借用资产"
+               (normalizedQuestion.includes('借用') && normalizedInput.includes('借用')) ||
+               (normalizedQuestion.includes('归还') && normalizedInput.includes('归还')) ||
+               (normalizedQuestion.includes('区块链') && normalizedInput.includes('区块链'))
       })
     }
   }
