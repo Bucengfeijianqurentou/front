@@ -9,6 +9,7 @@
         :text="content"
         :speed="50"
         @complete="onTypingComplete"
+        @typing-update="$emit('typing-update')"
       />
       <span v-else>{{ content }}</span>
     </div>

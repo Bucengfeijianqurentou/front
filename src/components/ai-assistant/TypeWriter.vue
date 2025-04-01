@@ -43,6 +43,7 @@ export default {
       if (this.currentIndex < text.length) {
         this.displayText += text[this.currentIndex]
         this.currentIndex++
+        this.$emit('typing-update')
         setTimeout(() => {
           this.typeText(text)
         }, this.speed)

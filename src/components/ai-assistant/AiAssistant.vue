@@ -27,6 +27,7 @@
             :content="message.content"
             :type="message.type"
             @complete="onMessageComplete(index)"
+            @typing-update="scrollToBottom"
           />
         </div>
         
@@ -134,7 +135,7 @@ export default {
       this.currentRelatedQuestions = []
     },
     async sendMessage() {
-      if (!this.userInput.trim() || this.isTyping) return
+      if (!this.userInput.trim() || this.isTyping || this.isThinking) return
       
       const userQuestion = this.userInput.trim()
       
@@ -148,11 +149,16 @@ export default {
       this.showPresetQuestions = false
       this.scrollToBottom()
       
-      // 模拟思考时间
+      // 显示思考状态并等待
+      this.isThinking = true
       await this.simulateThinking()
+      this.isThinking = false
       
       // 尝试匹配预设问题
       const matchedQuestion = this.findMatchingQuestion(userQuestion)
+      
+      // 设置正在输入状态
+      this.isTyping = true
       
       if (matchedQuestion) {
         // 如果找到匹配的预设问题，显示对应答案
@@ -160,6 +166,7 @@ export default {
           content: matchedQuestion.answer,
           type: 'assistant'
         })
+        this.scrollToBottom()
       } else {
         // 如果没有找到匹配的问题，显示默认回复
         this.messages.push({
@@ -167,12 +174,11 @@ export default {
           type: 'assistant'
         })
         this.showPresetQuestions = true
+        this.scrollToBottom()
       }
-      
-      this.scrollToBottom()
     },
-    handleQuestionClick(question) {
-      if (this.isTyping) return
+    async handleQuestionClick(question) {
+      if (this.isTyping || this.isThinking) return
       
       this.messages.push({
         content: question.question,
@@ -183,6 +189,11 @@ export default {
       this.currentRelatedQuestions = []
       this.scrollToBottom()
       
+      // 显示思考状态并等待
+      this.isThinking = true
+      await this.simulateThinking()
+      this.isThinking = false
+      
       // 设置正在输入状态
       this.isTyping = true
       
@@ -192,7 +203,6 @@ export default {
         type: 'assistant'
       })
       
-      // 在回答完成后，相关问题会通过 onMessageComplete 方法显示
       this.scrollToBottom()
     },
     onMessageComplete(index) {
@@ -209,24 +219,39 @@ export default {
             this.currentRelatedQuestions = getRelatedQuestions(question.id)
               .map(relatedQ => getQuestionById(relatedQ.id))
               .filter(q => q) // 过滤掉可能的空值
-            this.scrollToBottom()
           }
         }
         
         this.isTyping = false
+        // 消息完成后滚动到底部
+        this.$nextTick(() => {
+          this.scrollToBottom()
+        })
       }
     },
     async simulateThinking() {
-      this.isThinking = true;
       const thinkingTime = Math.random() * 1000 + 1000;
       await new Promise(resolve => setTimeout(resolve, thinkingTime));
-      this.isThinking = false;
     },
     scrollToBottom() {
       this.$nextTick(() => {
         const container = this.$refs.messageContainer
         if (container) {
-          container.scrollTop = container.scrollHeight
+          // 使用 requestAnimationFrame 确保在下一帧执行滚动
+          requestAnimationFrame(() => {
+            const scrollHeight = container.scrollHeight
+            const clientHeight = container.clientHeight
+            const maxScroll = scrollHeight - clientHeight
+            const currentScroll = container.scrollTop
+            
+            // 如果已经接近底部，才进行滚动
+            if (maxScroll - currentScroll < 150) {
+              container.scrollTo({
+                top: scrollHeight,
+                behavior: 'auto' // 改为即时滚动，避免打字过程中的滚动动画
+              })
+            }
+          })
         }
       })
     },
@@ -362,6 +387,14 @@ export default {
       flex: 1;
       padding: 16px;
       overflow-y: auto;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+      
+      /* 确保新消息在可视区域底部 */
+      > div:last-child {
+        margin-bottom: 16px;
+      }
       
       &::-webkit-scrollbar {
         width: 6px;
@@ -371,12 +404,20 @@ export default {
         background: rgba(0, 0, 0, 0.1);
         border-radius: 3px;
       }
+      
+      /* 增加底部间距，确保内容不被输入框遮挡 */
+      padding-bottom: 120px;
     }
     
     .chat-input {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       padding: 16px;
       background-color: #fff;
       border-top: 1px solid #eee;
+      z-index: 1;
     }
     
     .preset-questions {
