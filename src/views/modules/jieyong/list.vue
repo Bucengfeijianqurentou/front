@@ -58,6 +58,13 @@
                 </div>
                 
                 <div class="search-buttons">
+                    <el-button
+                        v-if="isAuth('jieyong','新增')"
+                        type="primary"
+                        icon="el-icon-plus"
+                        size="small"
+                        @click="addOrUpdateHandler()"
+                    >申请借用</el-button>
                     <el-button type="primary" size="small" @click="search()">查询</el-button>
                     <el-button size="small" @click="resetSearch()">重置</el-button>
                 </div>
@@ -264,14 +271,6 @@
                 size="small"
                 @click="chartDialog()"
             >报表</el-button>
-            
-            <el-button
-                v-if="isAuth('jieyong','新增')"
-                type="success"
-                icon="el-icon-plus"
-                size="small"
-                @click="addOrUpdateHandler()"
-            >新增</el-button>
             
             <a  v-if="isAuth('jieyong','导入导出')"
                 :href="importTemplateUrl"
