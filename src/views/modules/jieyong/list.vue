@@ -157,10 +157,19 @@
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
                                       prop="jieyongNumber"
                                       header-align="center"
-                                      width="120"
+                                      width="100"
                                       label="借用数量">
                         <template slot-scope="scope">
                             {{scope.row.jieyongNumber}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
+                                      prop="guihuanTime"
+                                      header-align="center"
+                                      width="180"
+                                      label="预计归还时间">
+                        <template slot-scope="scope">
+                            {{scope.row.guihuanTime}}
                         </template>
                     </el-table-column>
                     <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"

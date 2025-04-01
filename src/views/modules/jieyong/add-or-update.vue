@@ -205,6 +205,23 @@
                        </el-form-item>
                    </div>
                </el-col>
+               <el-col :span="12">
+                   <el-form-item class="date" v-if="type!='info'" label="预计归还" prop="guihuanTime">
+                       <el-date-picker
+                           v-model="ruleForm.guihuanTime"
+                           type="datetime"
+                           placeholder="选择预计归还时间"
+                           value-format="yyyy-MM-dd HH:mm:ss"
+                           :readonly="ro.guihuanTime">
+                       </el-date-picker>
+                   </el-form-item>
+                   <div v-else>
+                       <el-form-item class="input" label="预计归还" prop="guihuanTime">
+                           <el-input v-model="ruleForm.guihuanTime"
+                                     placeholder="预计归还时间" readonly></el-input>
+                       </el-form-item>
+                   </div>
+               </el-col>
                 <el-col :span="24">
                     <el-form-item v-if="type!='info'"  label="借用备注" prop="jieyongContent">
                         <editor style="min-width: 200px; max-width: 600px;"
@@ -250,6 +267,7 @@
                     jieyongContent: false,
                     guihuanTypes: false,
                     insertTime: false,
+                    guihuanTime: false,
                 },
                 ruleForm: {
                     yonghuId: '',
@@ -259,6 +277,7 @@
                     guihuanTypes: '',
                     insertTime: '',
                     transactionHash: '',
+                    guihuanTime: '',
                 },
                 guihuanTypesOptions : [],
                 shangpinOptions : [],
@@ -298,6 +317,9 @@
                    insertTime: [
                               { required: true, message: '借用时间不能为空', trigger: 'blur' },
                           ],
+                   guihuanTime: [
+                              { required: true, message: '预计归还时间不能为空', trigger: 'blur' }
+                          ]
                 },
                 listTransactionHash: null,
             };
