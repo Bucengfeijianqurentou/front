@@ -30,6 +30,18 @@
           />
         </div>
         
+        <!-- 思考中状态 -->
+        <div v-if="isThinking" class="thinking-status">
+          <div class="thinking-bubble">
+            <div class="thinking-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="thinking-text">思考中</div>
+          </div>
+        </div>
+        
         <!-- 预设问题 -->
         <div class="preset-questions" v-if="showPresetQuestions">
           <question-card
@@ -87,6 +99,7 @@ export default {
       messages: [],
       userInput: '',
       isTyping: false,
+      isThinking: false,
       showPresetQuestions: true,
       currentRelatedQuestions: [],
       presetQuestions
@@ -204,8 +217,10 @@ export default {
       }
     },
     async simulateThinking() {
-      this.isTyping = true
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      this.isThinking = true;
+      const thinkingTime = Math.random() * 1000 + 1000;
+      await new Promise(resolve => setTimeout(resolve, thinkingTime));
+      this.isThinking = false;
     },
     scrollToBottom() {
       this.$nextTick(() => {
@@ -392,6 +407,59 @@ export default {
   100% {
     transform: scale(2);
     opacity: 0;
+  }
+}
+
+.thinking-status {
+  padding: 12px;
+  
+  .thinking-bubble {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 8px 16px;
+    border-radius: 16px 16px 16px 0;
+    max-width: 120px;
+    
+    .thinking-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 8px;
+      
+      span {
+        width: 6px;
+        height: 6px;
+        background-color: #666;
+        border-radius: 50%;
+        display: inline-block;
+        animation: thinking 1.4s infinite;
+        
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+      }
+    }
+    
+    .thinking-text {
+      font-size: 12px;
+      color: #666;
+    }
+  }
+}
+
+@keyframes thinking {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
   }
 }
 
