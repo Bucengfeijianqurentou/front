@@ -424,7 +424,7 @@ export const presetQuestions = [
   {
     id: 12,
     question: '你是谁？',
-    answer: `我是专门为校园资产管理系统开发的AI助手，主要职责包括：
+    answer: `我是专门为资产管理系统开发的AI助手，主要职责包括：
 
 1. 解答问题
    - 资产借用归还流程

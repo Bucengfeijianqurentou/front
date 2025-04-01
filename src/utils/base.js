@@ -30,7 +30,7 @@ const base = {
     },
     getProjectName(){
         return {
-            projectName: "校园资产管理"
+            projectName: "区块链资产管理"
         } 
     }
 }
