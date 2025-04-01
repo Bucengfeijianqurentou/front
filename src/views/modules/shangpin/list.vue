@@ -47,6 +47,13 @@
                     <el-input v-model="searchForm.shangpinKucunNumberEndSearch" placeholder="最大值" size="small" clearable></el-input>
                 </div>
                 
+                <div class="search-item range-input">
+                    <span>资产价值</span>
+                    <el-input v-model="searchForm.priceStart" placeholder="最小值" size="small" clearable></el-input>
+                    <span class="range-separator">至</span>
+                    <el-input v-model="searchForm.priceEnd" placeholder="最大值" size="small" clearable></el-input>
+                </div>
+                
                 <div class="search-buttons">
                     <el-button type="primary" size="small" @click="search()">查询</el-button>
                     <el-button size="small" @click="resetSearch()">重置</el-button>
@@ -179,6 +186,16 @@
                                       label="资产库存">
                         <template slot-scope="scope">
                             {{scope.row.shangpinKucunNumber}}
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
+                                      prop="price"
+                                      header-align="center"
+                                      width="120"
+                                      label="资产价值">
+                        <template slot-scope="scope">
+                            ¥{{scope.row.price}}
                         </template>
                     </el-table-column>
 

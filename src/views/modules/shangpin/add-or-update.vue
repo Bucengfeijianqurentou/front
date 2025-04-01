@@ -98,6 +98,18 @@
                        </el-form-item>
                    </div>
                </el-col>
+               <el-col :span="12">
+                   <el-form-item class="input" v-if="type!='info'"  label="资产价值" prop="price">
+                       <el-input v-model="ruleForm.price"
+                                 placeholder="资产价值" clearable  :readonly="ro.price"></el-input>
+                   </el-form-item>
+                   <div v-else>
+                       <el-form-item class="input" label="资产价值" prop="price">
+                           <el-input v-model="ruleForm.price"
+                                     placeholder="资产价值" readonly></el-input>
+                       </el-form-item>
+                   </div>
+               </el-col>
                 <el-col :span="24">
                     <el-form-item v-if="type!='info'"  label="资产介绍" prop="shangpinContent">
                         <editor style="min-width: 200px; max-width: 600px;"
@@ -158,6 +170,7 @@
                     shangpinKucunNumber: false,
                     shangpinDelete: false,
                     shangpinContent: false,
+                    price: false,
                 },
                 ruleForm: {
                     shangpinUuidNumber: new Date().getTime(),
@@ -168,6 +181,7 @@
                     shangpinKucunNumber: '',
                     shangpinDelete: '',
                     shangpinContent: '',
+                    price: '',
                 },
                 shangpinTypesOptions : [],
                 didianTypesOptions : [],
@@ -211,6 +225,13 @@
                           ],
                    shangpinContent: [
                               { required: true, message: '资产介绍不能为空', trigger: 'blur' },
+                          ],
+                   price: [
+                              { required: true, message: '资产价值不能为空', trigger: 'blur' },
+                              {  pattern: /^[1-9][0-9]*$/,
+                                  message: '只允许输入整数',
+                                  trigger: 'blur'
+                              }
                           ],
                 }
             };
@@ -305,6 +326,11 @@
                       if(o=='shangpinContent'){
                           this.ruleForm.shangpinContent = obj[o];
                           this.ro.shangpinContent = true;
+                          continue;
+                      }
+                      if(o=='price'){
+                          this.ruleForm.price = obj[o];
+                          this.ro.price = true;
                           continue;
                       }
                     }
