@@ -48,7 +48,7 @@
             :key="question.id"
             :question="question.question"
             :is-related="true"
-            @click="handleQuestionClick(getQuestionById(question.id))"
+            @click="handleQuestionClick(question)"
           />
         </div>
       </div>
@@ -160,13 +160,14 @@ export default {
       // 设置正在输入状态
       this.isTyping = true
       
-      setTimeout(() => {
-        this.messages.push({
-          content: question.answer,
-          type: 'assistant'
-        })
-        this.scrollToBottom()
-      }, 500)
+      // 添加消息，并在回答完成后显示相关问题
+      this.messages.push({
+        content: question.answer,
+        type: 'assistant'
+      })
+      
+      // 在回答完成后，相关问题会通过 onMessageComplete 方法显示
+      this.scrollToBottom()
     },
     onMessageComplete(index) {
       if (this.messages[index].type === 'assistant') {
@@ -178,11 +179,10 @@ export default {
         if (lastUserMessage) {
           const question = this.presetQuestions.find(q => q.question === lastUserMessage.content)
           if (question) {
-            // 在打字机效果完成后才显示关联问题
-            this.currentRelatedQuestions = getRelatedQuestions(question.id).map(q => {
-              // 确保返回完整的问题对象
-              return getQuestionById(q.id)
-            })
+            // 获取关联问题的完整信息
+            this.currentRelatedQuestions = getRelatedQuestions(question.id)
+              .map(relatedQ => getQuestionById(relatedQ.id))
+              .filter(q => q) // 过滤掉可能的空值
             this.scrollToBottom()
           }
         }

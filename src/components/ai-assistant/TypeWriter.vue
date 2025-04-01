@@ -47,6 +47,7 @@ export default {
           this.typeText(text)
         }, this.speed)
       } else {
+        this.$emit('complete')
         this.onComplete()
       }
     }
