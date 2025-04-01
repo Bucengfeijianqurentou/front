@@ -165,9 +165,6 @@ export default {
           content: question.answer,
           type: 'assistant'
         })
-        
-        // 更新关联问题
-        this.currentRelatedQuestions = getRelatedQuestions(question.id)
         this.scrollToBottom()
       }, 500)
     },
@@ -181,8 +178,11 @@ export default {
         if (lastUserMessage) {
           const question = this.presetQuestions.find(q => q.question === lastUserMessage.content)
           if (question) {
-            // 确保关联问题已更新
-            this.currentRelatedQuestions = getRelatedQuestions(question.id)
+            // 在打字机效果完成后才显示关联问题
+            this.currentRelatedQuestions = getRelatedQuestions(question.id).map(q => {
+              // 确保返回完整的问题对象
+              return getQuestionById(q.id)
+            })
             this.scrollToBottom()
           }
         }
