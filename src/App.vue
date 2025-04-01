@@ -1,6 +1,16 @@
+import AiAssistant from '@/components/ai-assistant/AiAssistant.vue'
+
+export default {
+  name: 'app',
+  components: {
+    AiAssistant
+  }
+}
+
 <template>
   <div id="app" class="">
     <router-view></router-view>
+    <ai-assistant />
   </div>
 </template>
 
