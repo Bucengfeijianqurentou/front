@@ -1,23 +1,19 @@
-import AiAssistant from '@/components/ai-assistant/AiAssistant.vue'
-
-export default {
-  name: 'app',
-  components: {
-    AiAssistant
-  }
-}
-
 <template>
-  <div id="app" class="">
+  <div id="app">
     <router-view></router-view>
     <ai-assistant />
   </div>
 </template>
 
 <script>
+import AiAssistant from '@/components/ai-assistant/AiAssistant.vue'
+
 export default {
-  name: "app",
-};
+  name: 'App',
+  components: {
+    AiAssistant
+  }
+}
 </script>
 
 <style lang="scss">
@@ -36,7 +32,7 @@ html,body{
 }
 #app{
   height: 100%;
-  overflow: hidden;
+  position: relative;
 }
 body {
   padding: 0;

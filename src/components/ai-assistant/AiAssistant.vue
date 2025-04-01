@@ -94,11 +94,18 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$storage.get('Token')
+      const token = localStorage.getItem('Token') || sessionStorage.getItem('Token')
+      console.log('AI助手检查登录状态:', token)
+      return token
     }
   },
   mounted() {
-    this.messages.push(welcomeMessage)
+    console.log('AI助手组件已挂载')
+    console.log('登录状态:', this.isLoggedIn)
+    if (this.isLoggedIn) {
+      this.messages.push(welcomeMessage)
+      console.log('欢迎消息已添加')
+    }
   },
   methods: {
     expandChat() {
@@ -195,9 +202,9 @@ export default {
 <style lang="scss" scoped>
 .ai-assistant {
   position: fixed;
-  left: 20px;
+  right: 20px;
   bottom: 20px;
-  z-index: 1000;
+  z-index: 9999;
   
   .ai-icon {
     width: 48px;
@@ -208,14 +215,17 @@ export default {
     cursor: pointer;
     transition: transform 0.3s ease;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     
     &:hover {
       transform: scale(1.1);
     }
     
     img {
-      width: 100%;
-      height: 100%;
+      width: 32px;
+      height: 32px;
       object-fit: cover;
     }
     
@@ -242,17 +252,18 @@ export default {
   
   .chat-window {
     position: fixed;
-    left: 20px;
-    bottom: 20px;
+    right: 20px;
+    bottom: 80px;
     width: 400px;
     height: 600px;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(10px);
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    z-index: 9999;
     
     .chat-header {
       padding: 16px;
@@ -353,7 +364,7 @@ export default {
     .chat-window {
       width: calc(100vw - 40px);
       height: calc(100vh - 100px);
-      left: 20px;
+      right: 20px;
       bottom: 80px;
     }
   }

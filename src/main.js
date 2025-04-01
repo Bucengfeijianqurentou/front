@@ -5,14 +5,12 @@ import ElementUI from 'element-ui'
 import '@/assets/css/element-variables.scss'
 import '@/assets/css/style.scss'
 // 加载路由
-// import router from '@/router/router-static.js';
 import router from '@/router/router-static.js';
 // 面包屑导航，注册为全局组件
 import BreadCrumbs from '@/components/common/BreadCrumbs'
 // 引入echart
 import echarts from 'echarts'
 // 引入echart主题
-// import  '@/assets/js/echarts-theme-macarons.js'
 import 'echarts/theme/macarons.js'
 // ajax
 import http from '@/utils/http.js'
@@ -32,8 +30,6 @@ import api from '@/utils/api'
 import * as validate from '@/utils/validate.js'
 // 通知服务
 import notificationService from '@/utils/notification'
-// 后台地图
-import VueAMap from 'vue-amap'
 import '@/icons'
 //excel导出
 import JsonExcel from 'vue-json-excel'
@@ -48,14 +44,6 @@ import md5 from 'js-md5';
 const EventBus = new Vue();
 Vue.prototype.$bus = EventBus;
 
-// 后台地图
-Vue.use(VueAMap)
-VueAMap.initAMapApiLoader({
-  key: 'ca04cee7ac952691aa67a131e6f0cee0',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geocoder'],
-  // 默认高德 sdk 版本为 1.4.4
-  v: '1.4.4'
-})
 Vue.prototype.$validate = validate
 Vue.prototype.$http = http // ajax请求方法
 Vue.prototype.$echarts = echarts
@@ -85,6 +73,8 @@ Vue.prototype.$notificationService = notificationService;
 
 // 添加全局调试日志
 console.log('通知服务初始化完成')
+console.log('当前Token状态:', storage.get('Token'))
+console.log('当前用户角色:', storage.get('role'))
 
 // 添加路由守卫
 router.beforeEach((to, from, next) => {
