@@ -1,9 +1,16 @@
 <template>
   <div class="ai-assistant" v-if="isLoggedIn">
-    <!-- 悬浮图标 -->
-    <div class="ai-icon" v-if="!isExpanded" @click="expandChat">
-      <img src="@/assets/logo.svg" alt="AI助手">
-      <span class="pulse"></span>
+    <!-- 悬浮图标和标签 -->
+    <div class="ai-assistant-wrapper" v-if="!isExpanded">
+      <div class="ai-label">
+        <i class="el-icon-service"></i>
+        <span>AI 助理</span>
+      </div>
+      <div class="ai-icon" @click="expandChat">
+        <img src="@/assets/logo.svg" alt="AI助手">
+        <div class="tooltip">点击咨询AI助手</div>
+        <span class="pulse"></span>
+      </div>
     </div>
     
     <!-- 聊天窗口 -->
@@ -283,37 +290,106 @@ export default {
   bottom: 20px;
   z-index: 9999;
   
+  .ai-assistant-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .ai-label {
+      background: linear-gradient(135deg, #2D5AF0, #40c9c6);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(45, 90, 240, 0.25);
+      transform: translateX(20px);
+      opacity: 0;
+      animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      
+      i {
+        font-size: 16px;
+      }
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(45, 90, 240, 0.35);
+      }
+    }
+  }
+  
   .ai-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2D5AF0, #40c9c6);
+    box-shadow: 0 4px 12px rgba(45, 90, 240, 0.25);
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     
     &:hover {
-      transform: scale(1.1);
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 8px 16px rgba(45, 90, 240, 0.3);
+      
+      .tooltip {
+        opacity: 0;
+      }
+    }
+    
+    &:active {
+      transform: translateY(-2px) scale(0.98);
     }
     
     img {
       width: 32px;
       height: 32px;
       object-fit: cover;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .tooltip {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 6px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.8);
+      }
     }
     
     .pulse {
       position: absolute;
       top: -2px;
       right: -2px;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       background-color: #40c9c6;
       border-radius: 50%;
+      border: 2px solid #fff;
       
       &::after {
         content: '';
@@ -322,7 +398,7 @@ export default {
         height: 100%;
         background-color: inherit;
         border-radius: 50%;
-        animation: pulse 1.5s infinite;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       }
     }
   }
@@ -436,17 +512,26 @@ export default {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 @keyframes pulse {
   0% {
     transform: scale(1);
     opacity: 0.8;
   }
   70% {
-    transform: scale(2);
+    transform: scale(2.5);
     opacity: 0;
   }
   100% {
-    transform: scale(2);
+    transform: scale(3);
     opacity: 0;
   }
 }
@@ -500,6 +585,17 @@ export default {
   }
   30% {
     transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
     opacity: 1;
   }
 }
