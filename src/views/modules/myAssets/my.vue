@@ -91,6 +91,30 @@
         layout="total, sizes, prev, pager, next, jumper" style="margin-top: 20px; text-align: center">
       </el-pagination>
     </div>
+
+    <!-- 转让对话框 -->
+    <el-dialog title="资产转让" :visible.sync="transferDialogVisible" width="500px" @close="closeTransferDialog">
+      <el-form :model="transferForm" :rules="transferRules" ref="transferForm" label-width="100px">
+        <el-form-item label="接收用户" prop="toId">
+          <el-select v-model="transferForm.toId" filterable placeholder="请选择接收用户" style="width: 100%">
+            <el-option
+              v-for="item in userList"
+              :key="item.id"
+              :label="item.yonghuName + ' (' + item.yonghuPhone + ')'"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="资产信息" class="asset-info">
+          <div>资产名称：{{ currentAsset.shangpinName }}</div>
+          <div>资产编号：{{ currentAsset.shangpinUuidNumber }}</div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeTransferDialog">取 消</el-button>
+        <el-button type="primary" @click="submitTransfer" :loading="transferLoading">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -105,7 +129,19 @@ export default {
       totalPage: 0, // 总条数
       dataListLoading: false, // 数据列表加载状态
       exportLoading: false, // 导出按钮加载状态
-      userId: this.$storage.get('userId') // 当前用户ID
+      userId: this.$storage.get('userId'), // 当前用户ID
+      transferDialogVisible: false, // 转让对话框可见性
+      transferLoading: false, // 转让提交加载状态
+      userList: [], // 用户列表
+      currentAsset: {}, // 当前选中的资产
+      transferForm: {
+        toId: '', // 接收用户ID
+      },
+      transferRules: {
+        toId: [
+          { required: true, message: '请选择接收用户', trigger: 'change' }
+        ]
+      }
     }
   },
   created() {
@@ -195,9 +231,62 @@ export default {
     viewDetails(id) {
       this.$router.push(`/index/jieyong?id=${id}&type=info`)
     },
-    // 转让资产
+    // 打开转让对话框
     handleTransfer(row) {
-      this.$message.info('转让功能开发中...')
+      this.currentAsset = row
+      this.transferDialogVisible = true
+      this.loadUserList()
+    },
+    // 加载用户列表
+    loadUserList() {
+      this.$http({
+        url: 'yonghu/list',
+        method: 'get'
+      }).then(({ data }) => {
+        if (data && data.code === 0) {
+          // 过滤掉当前用户
+          this.userList = data.data.filter(user => user.id !== parseInt(this.userId))
+        }
+      })
+    },
+    // 关闭转让对话框
+    closeTransferDialog() {
+      this.transferDialogVisible = false
+      this.transferForm.toId = ''
+      this.$refs.transferForm && this.$refs.transferForm.resetFields()
+    },
+    // 提交转让
+    submitTransfer() {
+      this.$refs.transferForm.validate(valid => {
+        if (valid) {
+          this.transferLoading = true
+          const transferData = {
+            fromId: parseInt(this.userId),
+            toId: this.transferForm.toId,
+            shangpinId: this.currentAsset.id,
+            shangpinName: this.currentAsset.shangpinName,
+            status: 1 // 1: 未接收
+          }
+
+          this.$http({
+            url: 'zhuanrang/save',
+            method: 'post',
+            data: transferData
+          }).then(({ data }) => {
+            if (data && data.code === 0) {
+              this.$message.success('转让申请已提交')
+              this.closeTransferDialog()
+              this.getDataList() // 刷新列表
+            } else {
+              this.$message.error(data.msg || '转让失败')
+            }
+            this.transferLoading = false
+          }).catch(() => {
+            this.$message.error('转让失败')
+            this.transferLoading = false
+          })
+        }
+      })
     }
   }
 }
@@ -243,6 +332,20 @@ export default {
 
     &:hover {
       text-decoration: underline;
+    }
+  }
+
+  .asset-info {
+    margin-top: 15px;
+    div {
+      margin-bottom: 8px;
+      color: #606266;
+    }
+  }
+
+  .el-dialog {
+    .el-select {
+      width: 100%;
     }
   }
 }
