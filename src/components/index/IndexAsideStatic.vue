@@ -94,6 +94,15 @@
             <el-menu-item index="9-2" @click="menuHandler('newsStatistics')" v-if="isAdmin">新闻统计</el-menu-item>
           </el-submenu>
 
+          <el-submenu index="10" :style="menulistBorderBottom">
+            <template slot="title">
+              <i class="el-icon-wallet" />
+              <span>我的资产</span>
+            </template>
+            <el-menu-item index="10-1" @click="menuHandler('myAssets')">我的</el-menu-item>
+            <el-menu-item index="10-2" @click="menuHandler('assetTransfer')">资产转让记录</el-menu-item>
+          </el-submenu>
+
           <el-submenu index="6" :style="menulistBorderBottom">
             <template slot="title">
               <i class="el-icon-user-solid" />
@@ -331,6 +340,12 @@ export default {
           break;
         case '/center':
           this.activeIndex = '6-2';
+          break;
+        case '/myAssets':
+          this.activeIndex = '10-1';
+          break;
+        case '/assetTransfer':
+          this.activeIndex = '10-2';
           break;
         default:
           this.activeIndex = '0';

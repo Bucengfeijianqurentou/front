@@ -45,6 +45,10 @@ import HomePage from '@/views/HomePage'
         import newsList from '@/views/modules/newsManagement/list'
         import newsStatistics from '@/views/modules/newsManagement/statistics'
 
+        // 我的资产相关页面
+        import myAssets from '@/views/modules/myAssets/my'
+        import assetTransfer from '@/views/modules/myAssets/transfer'
+
 //2.配置路由   注意：名字
 const routes = [
   {
@@ -202,6 +206,17 @@ const routes = [
         path: 'newsStatistics',
         name: '新闻统计',
         component: newsStatistics
+    }
+    // 我的资产相关路由
+    ,{
+        path: 'myAssets',
+        name: '我的',
+        component: myAssets
+    }
+    ,{
+        path: 'assetTransfer',
+        name: '资产转让记录',
+        component: assetTransfer
     }
     ]
   },
