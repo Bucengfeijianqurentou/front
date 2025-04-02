@@ -240,13 +240,22 @@ export default {
     // 加载用户列表
     loadUserList() {
       this.$http({
-        url: 'yonghu/list',
-        method: 'get'
+        url: 'yonghu/page',
+        method: 'get',
+        params: {
+          page: 1,
+          limit: 1000,
+          yonghuStatus: 1 // 1表示已通过审核的用户
+        }
       }).then(({ data }) => {
         if (data && data.code === 0) {
           // 过滤掉当前用户
-          this.userList = data.data.filter(user => user.id !== parseInt(this.userId))
+          this.userList = data.data.list.filter(user => user.id !== parseInt(this.userId))
+        } else {
+          this.$message.error('获取用户列表失败')
         }
+      }).catch(() => {
+        this.$message.error('获取用户列表失败')
       })
     },
     // 关闭转让对话框
