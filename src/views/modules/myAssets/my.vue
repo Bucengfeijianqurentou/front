@@ -4,7 +4,7 @@
     <el-card class="stats-card" shadow="hover">
       <div class="stats-info">
         <div class="stats-item">
-          <div class="stats-label">当前借用资产总数</div>
+          <div class="stats-label">我的资产</div>
           <div class="stats-value">{{ totalPage }} 件</div>
         </div>
         <div class="export-button">
@@ -79,11 +79,8 @@
         <el-table-column label="操作" min-width="180" align="center">
           <template slot-scope="scope">
             <div class="operation-buttons">
-              <el-button type="success" icon="el-icon-tickets" size="mini"
-                @click="viewDetails(scope.row.id)">详情</el-button>
-              <el-button type="warning" icon="el-icon-back" size="mini" @click="guihuan(scope.row.id)">归还</el-button>
-              <el-button type="warning" icon="el-icon-s-tools" size="mini"
-                @click="applyForRepair(scope.row)">申请维修</el-button>
+              <el-button type="success" icon="el-icon-tickets" size="mini" @click="viewDetails(scope.row.id)">详情</el-button>
+              <el-button type="primary" icon="el-icon-share" size="mini" @click="handleTransfer(scope.row)">转让</el-button>
             </div>
           </template>
         </el-table-column>
@@ -125,7 +122,7 @@ export default {
           page: this.pageIndex,
           limit: this.pageSize,
           userId: this.userId,
-          guihuanTypes: 1 // 1表示借用中
+          guihuanTypes: 1 // 1表示未归还
         }
       }).then(({ data }) => {
         if (data && data.code === 0) {
@@ -146,21 +143,21 @@ export default {
           page: 1,
           limit: 10000, // 设置较大的数值以获取所有数据
           userId: this.userId,
-          guihuanTypes: 1
+          guihuanTypes: 1 // 1表示未归还
         }
       }).then(({ data }) => {
         if (data && data.code === 0) {
           const list = data.data.list
           // 准备Excel数据
-          const header = ['资产编号', '资产名称', '资产类型', '存放地点', '借用数量', '预计归还时间', '借用时间', '交易哈希']
-          const filterVal = ['shangpinUuidNumber', 'shangpinName', 'shangpinValue', 'didianValue', 'jieyongNumber', 'guihuanTime', 'insertTime', 'transactionHash']
+          const header = ['资产编号', '资产名称', '资产类型', '存放地点', '借用数量', '借用时间', '交易哈希']
+          const filterVal = ['shangpinUuidNumber', 'shangpinName', 'shangpinValue', 'didianValue', 'jieyongNumber', 'insertTime', 'transactionHash']
           const excelData = list.map(item => filterVal.map(key => item[key]))
 
           import('@/vendor/Export2Excel').then(excel => {
             excel.export_json_to_excel({
               header: header,
               data: excelData,
-              filename: '我的资产列表',
+              filename: '我的未归还资产列表',
               autoWidth: true,
               bookType: 'xlsx'
             })
@@ -198,35 +195,9 @@ export default {
     viewDetails(id) {
       this.$router.push(`/index/jieyong?id=${id}&type=info`)
     },
-    // 归还资产
-    guihuan(id) {
-      this.$confirm('确认要归还该资产吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$http({
-          url: `jieyong/guihuan/${id}`,
-          method: 'post'
-        }).then(({ data }) => {
-          if (data && data.code === 0) {
-            this.$message.success('已提交归还申请')
-            this.getDataList()
-          } else {
-            this.$message.error(data.msg)
-          }
-        })
-      })
-    },
-    // 申请维修
-    applyForRepair(row) {
-      this.$router.push({
-        path: '/index/weixiu',
-        query: {
-          shangpinId: row.shangpinId,
-          jieyongId: row.id
-        }
-      })
+    // 转让资产
+    handleTransfer(row) {
+      this.$message.info('转让功能开发中...')
     }
   }
 }
