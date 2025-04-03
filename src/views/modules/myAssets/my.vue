@@ -269,13 +269,20 @@ export default {
       this.$refs.transferForm.validate(valid => {
         if (valid) {
           this.transferLoading = true
+          // 打印当前资产信息，用于调试
+          console.log('当前资产信息:', this.currentAsset)
+          
           const transferData = {
             fromId: parseInt(this.userId),
             toId: this.transferForm.toId,
-            shangpinId: this.currentAsset.id,
+            shangpinId: this.currentAsset.shangpinId,
             shangpinName: this.currentAsset.shangpinName,
-            status: 1 // 1: 未接收
+            shangpinPrice: 0,
+            status: 1
           }
+
+          // 打印转让数据，用于调试
+          console.log('转让数据:', transferData)
 
           this.$http({
             url: 'zhuanrang/save',
