@@ -510,6 +510,11 @@ export default {
       loadData: {
         times: [],
         values: []
+      },
+      connectionData: {
+        active: 1286,
+        waiting: 89,
+        rejected: 23
       }
     }
   },
@@ -791,36 +796,57 @@ export default {
       const option = {
         tooltip: {
           trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
+          formatter: '{a} <br/>{b}: {c} ({d}%)',
+          textStyle: {
+            fontSize: 14
+          }
         },
         legend: {
           orient: 'vertical',
-          right: 10,
-          top: 'center',
-          data: ['3D打印设备', '激光加工设备', 'CNC设备', '机器人设备', '其他设备'],
+          right: '5%',
+          top: 'middle',
+          itemWidth: 14,
+          itemHeight: 14,
+          itemGap: 20,
+          textStyle: {
+            color: '#e1e6f0',
+            fontSize: 14,
+            fontWeight: 500,
+            padding: [0, 0, 0, 4]
+          },
           formatter: function(name) {
-            return name.length > 6 ? name.substring(0, 6) + '...' : name
+            return name
           }
         },
         series: [
           {
             name: '资产分类',
             type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
+            radius: ['45%', '65%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: true,
+            itemStyle: {
+              borderRadius: 10,
+              borderColor: '#1b2838',
+              borderWidth: 2
             },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '18',
-                fontWeight: 'bold'
-              }
+            label: {
+              show: true,
+              position: 'outside',
+              formatter: '{b}\n{c}台',
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#e1e6f0',
+              lineHeight: 20
             },
             labelLine: {
-              show: false
+              show: true,
+              length: 15,
+              length2: 10,
+              lineStyle: {
+                color: '#409eff',
+                width: 1
+              }
             },
             data: [
               { value: 335, name: '3D打印设备', itemStyle: { color: '#f56c6c' } },
@@ -956,11 +982,23 @@ export default {
       const chart = echarts.init(this.$refs.statusChart, 'dark')
       const option = {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: '{b}: {c} ({d}%)',
+          textStyle: {
+            fontSize: 14
+          }
         },
         legend: {
           bottom: '5%',
-          left: 'center'
+          left: 'center',
+          itemWidth: 12,
+          itemHeight: 12,
+          textStyle: {
+            color: '#e1e6f0',
+            fontSize: 14,
+            fontWeight: 500
+          },
+          itemGap: 20
         },
         series: [
           {
@@ -968,25 +1006,28 @@ export default {
             type: 'pie',
             radius: ['40%', '70%'],
             center: ['50%', '45%'],
-            avoidLabelOverlap: false,
+            avoidLabelOverlap: true,
             itemStyle: {
               borderRadius: 10,
-              borderColor: '#fff',
+              borderColor: '#1b2838',
               borderWidth: 2
             },
             label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '18',
-                fontWeight: 'bold'
-              }
+              show: true,
+              position: 'outside',
+              formatter: '{b}: {c}',
+              fontSize: 14,
+              fontWeight: 500,
+              color: '#e1e6f0'
             },
             labelLine: {
-              show: false
+              show: true,
+              length: 15,
+              length2: 10,
+              lineStyle: {
+                color: '#409eff',
+                width: 1
+              }
             },
             data: [
               { value: 1450, name: '正常使用', itemStyle: { color: '#67c23a' } },
@@ -1375,42 +1416,112 @@ export default {
       const chart = echarts.init(this.$refs.connectionChart, 'dark')
       const option = {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: function(params) {
+            return `${params.name}: ${params.value} 个`
+          }
         },
-        legend: {
-          top: '5%',
-          left: 'center'
+        grid: {
+          top: '10%',
+          bottom: '10%',
+          left: '20%',  // 调整左侧边距
+          right: '15%'  // 调整右侧边距
         },
-        series: [{
-          name: '连接状态',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '18',
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
+        xAxis: {
+          max: 1500,
+          splitLine: {
             show: false
           },
-          data: [
-            { value: 1286, name: '活跃连接', itemStyle: { color: '#67C23A' } },
-            { value: 89, name: '等待连接', itemStyle: { color: '#E6A23C' } },
-            { value: 23, name: '拒绝连接', itemStyle: { color: '#F56C6C' } }
-          ]
-        }]
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['活跃连接', '等待连接', '拒绝连接'],
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            color: '#e1e6f0',
+            fontSize: 14,
+            margin: 20,
+            fontWeight: 500
+          }
+        },
+        series: [
+          {
+            type: 'bar',
+            data: [
+              {
+                value: this.connectionData.active,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#67C23A' },
+                    { offset: 1, color: '#95D475' }
+                  ])
+                }
+              },
+              {
+                value: this.connectionData.waiting,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#E6A23C' },
+                    { offset: 1, color: '#F3D19E' }
+                  ])
+                }
+              },
+              {
+                value: this.connectionData.rejected,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#F56C6C' },
+                    { offset: 1, color: '#FBC4C4' }
+                  ])
+                }
+              }
+            ],
+            barWidth: 20,
+            barGap: '100%',
+            barCategoryGap: '50%',
+            label: {
+              show: true,
+              position: 'right',
+              color: '#e1e6f0',
+              fontSize: 14,
+              fontWeight: 500,
+              formatter: '{c}',
+              distance: 15
+            },
+            itemStyle: {
+              borderRadius: [0, 4, 4, 0]
+            },
+            z: 2
+          },
+          {
+            type: 'bar',
+            data: [1500, 1500, 1500],
+            barWidth: 20,
+            barGap: '-100%',
+            itemStyle: {
+              color: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: [0, 4, 4, 0]
+            },
+            z: 1
+          }
+        ]
       }
       chart.setOption(option)
       window.addEventListener('resize', () => chart.resize())
@@ -1483,6 +1594,60 @@ export default {
             data: downloadData
           }]
         })
+      }
+
+      // 更新网络连接状态数据
+      const connectionChart = echarts.getInstanceByDom(this.$refs.connectionChart)
+      if (connectionChart) {
+        // 生成新的随机数据
+        this.connectionData = {
+          active: Math.floor(Math.random() * 300 + 1100),  // 1100-1400
+          waiting: Math.floor(Math.random() * 50 + 60),    // 60-110
+          rejected: Math.floor(Math.random() * 15 + 15)    // 15-30
+        }
+        
+        // 更新图表数据
+        connectionChart.setOption({
+          series: [{
+            data: [
+              {
+                value: this.connectionData.active,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#67C23A' },
+                    { offset: 1, color: '#95D475' }
+                  ])
+                }
+              },
+              {
+                value: this.connectionData.waiting,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#E6A23C' },
+                    { offset: 1, color: '#F3D19E' }
+                  ])
+                }
+              },
+              {
+                value: this.connectionData.rejected,
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                    { offset: 0, color: '#F56C6C' },
+                    { offset: 1, color: '#FBC4C4' }
+                  ])
+                }
+              }
+            ]
+          }]
+        })
+
+        // 更新底部统计数据的DOM
+        const statBoxes = document.querySelectorAll('.connection-stats .stat-box .value')
+        if (statBoxes.length === 3) {
+          statBoxes[0].textContent = this.connectionData.active.toLocaleString()
+          statBoxes[1].textContent = this.connectionData.waiting.toLocaleString()
+          statBoxes[2].textContent = this.connectionData.rejected.toLocaleString()
+        }
       }
     },
     // 获取区块链数据
@@ -2118,6 +2283,33 @@ export default {
   }
   100% {
     transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.connection-stats {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(64, 158, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(64, 158, 255, 0.1);
+  
+  .stat-box {
+    text-align: center;
+    padding: 10px;
+    
+    .value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e1e6f0;
+      margin-bottom: 5px;
+      text-shadow: 0 0 10px rgba(64, 158, 255, 0.2);
+    }
+    
+    .label {
+      font-size: 14px;
+      color: #8b9bb4;
+      font-weight: 500;
+    }
   }
 }
 </style>
