@@ -243,14 +243,7 @@
             </div>
           </div>
           <div class="chart-container">
-            <div class="gauge-info">
-              <div class="current-value">78.5%</div>
-              <div class="trend up">
-                <i class="el-icon-top"></i>
-                <span>2.3%</span>
-              </div>
-            </div>
-            <div ref="cpuChart" style="width: 100%; height: 200px;"></div>
+            <div ref="cpuChart" style="width: 100%; height: 280px;"></div>
             <div class="core-stats">
               <div class="core-item">
                 <span class="label">核心温度</span>
@@ -278,22 +271,7 @@
             </div>
           </div>
           <div class="chart-container">
-            <div ref="memoryChart" style="width: 100%; height: 200px;"></div>
-            <div class="memory-stats">
-              <div class="stat-row">
-                <span class="label">总内存</span>
-                <span class="value">32GB</span>
-              </div>
-              <div class="stat-row">
-                <span class="label">已使用</span>
-                <span class="value">18.6GB</span>
-              </div>
-              <div class="stat-row">
-                <span class="label">可用</span>
-                <span class="value">13.4GB</span>
-              </div>
-              <el-progress :percentage="58" :show-text="false" :stroke-width="8" color="#409EFF"></el-progress>
-            </div>
+            <div ref="memoryChart" style="width: 100%; height: 280px;"></div>
           </div>
         </el-card>
       </el-col>
@@ -528,7 +506,11 @@ export default {
       txSum: 0,
       todayTx: 0,
       lastUpdateTime: '',
-      updateTimer: null
+      updateTimer: null,
+      loadData: {
+        times: [],
+        values: []
+      }
     }
   },
   mounted() {
@@ -1025,75 +1007,71 @@ export default {
     initCpuChart() {
       const chart = echarts.init(this.$refs.cpuChart, 'dark')
       const option = {
-        series: [{
-          type: 'gauge',
-          startAngle: 180,
-          endAngle: 0,
-          min: 0,
-          max: 100,
-          splitNumber: 8,
-          axisLine: {
-            lineStyle: {
-              width: 6,
-              color: [
-                [0.3, '#67C23A'],
-                [0.7, '#E6A23C'],
-                [1, '#F56C6C']
-              ]
-            }
-          },
-          pointer: {
-            icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-            length: '12%',
-            width: 20,
-            offsetCenter: [0, '-60%'],
-            itemStyle: {
-              color: 'auto'
-            }
-          },
-          axisTick: {
-            length: 12,
-            lineStyle: {
-              color: 'auto',
-              width: 2
-            }
-          },
-          splitLine: {
-            length: 20,
-            lineStyle: {
-              color: 'auto',
-              width: 3
-            }
-          },
-          axisLabel: {
-            color: '#464646',
-            fontSize: 12,
-            distance: -60,
-            formatter: function(value) {
-              if (value === 100) {
-                return '100%'
+        tooltip: {
+          formatter: '{b} : {c}%'
+        },
+        series: [
+          {
+            type: 'gauge',
+            radius: '100%',
+            progress: {
+              show: true,
+              width: 18,
+              itemStyle: {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [{
+                    offset: 0,
+                    color: '#409EFF'
+                  }, {
+                    offset: 1,
+                    color: '#36A3F7'
+                  }]
+                }
               }
-              return value + ''
-            }
-          },
-          title: {
-            offsetCenter: [0, '-20%'],
-            fontSize: 12
-          },
-          detail: {
-            fontSize: 30,
-            offsetCenter: [0, '0%'],
-            valueAnimation: true,
-            formatter: function(value) {
-              return value.toFixed(1) + '%'
             },
-            color: 'auto'
-          },
-          data: [{
-            value: 78.5,
-            name: 'CPU'
-          }]
-        }]
+            axisLine: {
+              lineStyle: {
+                width: 18,
+                color: [[1, 'rgba(64, 158, 255, 0.1)']]
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            },
+            axisLabel: {
+              distance: 25,
+              color: '#8b9bb4',
+              fontSize: 12
+            },
+            pointer: {
+              show: false
+            },
+            anchor: {
+              show: false
+            },
+            title: {
+              show: false
+            },
+            detail: {
+              valueAnimation: true,
+              fontSize: 30,
+              offsetCenter: [0, '0%'],
+              formatter: '{value}%',
+              color: '#e1e6f0'
+            },
+            data: [{
+              value: 75
+            }]
+          }
+        ]
       }
       chart.setOption(option)
       window.addEventListener('resize', () => chart.resize())
@@ -1102,59 +1080,122 @@ export default {
       const chart = echarts.init(this.$refs.memoryChart, 'dark')
       const option = {
         tooltip: {
-          trigger: 'item'
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
         },
-        legend: {
-          bottom: '5%',
-          left: 'center',
-          icon: 'circle'
+        grid: {
+          top: '10%',
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
         },
-        series: [{
-          name: '内存使用',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          center: ['50%', '40%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
+        xAxis: {
+          type: 'value',
+          max: 32,
+          axisLine: {
             show: false
           },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '18',
-              fontWeight: 'bold'
+          axisTick: {
+            show: false
+          },
+          splitLine: {
+            lineStyle: {
+              color: 'rgba(64, 158, 255, 0.1)',
+              type: 'dashed'
             }
           },
-          labelLine: {
+          axisLabel: {
+            formatter: '{value}GB',
+            color: '#8b9bb4'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['内存'],
+          axisLine: {
             show: false
           },
-          data: [
-            { value: 18.6, name: '已使用', itemStyle: { color: '#409EFF' } },
-            { value: 13.4, name: '可用', itemStyle: { color: '#95CCE7' } }
-          ]
-        }]
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            color: '#8b9bb4'
+          }
+        },
+        series: [
+          {
+            name: '已使用',
+            type: 'bar',
+            stack: 'total',
+            data: [18.6],
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#409EFF' },
+                { offset: 1, color: '#36A3F7' }
+              ]),
+              borderRadius: [0, 0, 0, 0]
+            },
+            label: {
+              show: true,
+              position: 'inside',
+              formatter: '{c}GB',
+              color: '#fff'
+            }
+          },
+          {
+            name: '可用',
+            type: 'bar',
+            stack: 'total',
+            data: [13.4],
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: 'rgba(64, 158, 255, 0.1)' },
+                { offset: 1, color: 'rgba(54, 163, 247, 0.1)' }
+              ]),
+              borderRadius: [0, 4, 4, 0]
+            },
+            label: {
+              show: true,
+              position: 'inside',
+              formatter: '{c}GB',
+              color: '#8b9bb4'
+            }
+          }
+        ]
       }
       chart.setOption(option)
       window.addEventListener('resize', () => chart.resize())
     },
     initLoadChart() {
       const chart = echarts.init(this.$refs.loadChart, 'dark')
+      // 初始化时间数据
+      const now = new Date()
+      const times = []
+      const values = []
+      
+      for (let i = 20; i >= 0; i--) {
+        times.push(moment(now).subtract(i * 10, 'seconds').format('HH:mm:ss'))
+        values.push((Math.random() * 1.5 + 0.5).toFixed(2))
+      }
+      
+      this.loadData.times = times
+      this.loadData.values = values
+      
       const option = {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-            type: 'cross',
-            label: {
-              backgroundColor: '#6a7985'
-            }
+            type: 'cross'
+          },
+          formatter: function(params) {
+            return `${params[0].name}<br/>负载: ${params[0].value}`
           }
         },
         grid: {
+          top: '15%',
           left: '3%',
           right: '4%',
           bottom: '3%',
@@ -1163,40 +1204,77 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['1分钟', '5分钟', '15分钟', '30分钟', '1小时', '2小时', '3小时']
-        },
-        yAxis: {
-          type: 'value',
-          splitLine: {
+          data: times,
+          axisLine: {
             lineStyle: {
-              type: 'dashed'
+              color: 'rgba(64, 158, 255, 0.2)'
+            }
+          },
+          axisLabel: {
+            color: '#8b9bb4',
+            rotate: 45,
+            formatter: function(value) {
+              return value.split(':')[2]
             }
           }
         },
-        series: [{
-          name: '系统负载',
-          type: 'line',
-          stack: 'Total',
-          smooth: true,
-          lineStyle: {
-            width: 0
+        yAxis: {
+          type: 'value',
+          name: '负载',
+          min: 0,
+          max: 3,
+          interval: 0.5,
+          axisLine: {
+            show: false
           },
-          showSymbol: false,
-          areaStyle: {
-            opacity: 0.8,
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-              offset: 0,
-              color: 'rgb(128, 255, 165)'
-            }, {
-              offset: 1,
-              color: 'rgb(1, 191, 236)'
-            }])
+          axisTick: {
+            show: false
           },
-          emphasis: {
-            focus: 'series'
+          splitLine: {
+            lineStyle: {
+              color: 'rgba(64, 158, 255, 0.1)',
+              type: 'dashed'
+            }
           },
-          data: [1.2, 2.1, 1.8, 2.4, 1.6, 1.9, 1.5]
-        }]
+          axisLabel: {
+            color: '#8b9bb4',
+            formatter: '{value}'
+          }
+        },
+        series: [
+          {
+            name: '系统负载',
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            sampling: 'average',
+            lineStyle: {
+              width: 2,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: '#409EFF' },
+                { offset: 1, color: '#36A3F7' }
+              ])
+            },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(64, 158, 255, 0.3)' },
+                { offset: 1, color: 'rgba(64, 158, 255, 0.1)' }
+              ])
+            },
+            data: values,
+            markArea: {
+              itemStyle: {
+                color: 'rgba(255, 173, 177, 0.1)'
+              },
+              data: [[{
+                name: '高负载区间',
+                yAxis: 2
+              }, {
+                yAxis: 3
+              }]]
+            }
+          }
+        ]
       }
       chart.setOption(option)
       window.addEventListener('resize', () => chart.resize())
@@ -1345,8 +1423,43 @@ export default {
         cpuChart.setOption({
           series: [{
             data: [{
-              value: newValue
+              value: newValue.toFixed(1)
             }]
+          }]
+        })
+      }
+
+      // 更新内存数据
+      const memoryChart = echarts.getInstanceByDom(this.$refs.memoryChart)
+      if (memoryChart) {
+        const totalMemory = 32
+        const usedMemory = (Math.random() * 10 + 15).toFixed(1) // 模拟15-25GB的已用内存
+        const availableMemory = (totalMemory - usedMemory).toFixed(1)
+        
+        memoryChart.setOption({
+          series: [{
+            data: [usedMemory]
+          }, {
+            data: [availableMemory]
+          }]
+        })
+      }
+
+      // 更新系统负载数据
+      const loadChart = echarts.getInstanceByDom(this.$refs.loadChart)
+      if (loadChart) {
+        const now = moment()
+        this.loadData.times.shift()
+        this.loadData.values.shift()
+        this.loadData.times.push(now.format('HH:mm:ss'))
+        this.loadData.values.push((Math.random() * 1.5 + 0.5).toFixed(2))
+        
+        loadChart.setOption({
+          xAxis: {
+            data: this.loadData.times
+          },
+          series: [{
+            data: this.loadData.values
           }]
         })
       }
@@ -1800,104 +1913,34 @@ export default {
 }
 
 .system-monitor {
-  .gauge-info {
-    text-align: center;
-    margin-bottom: 15px;
+  .chart-container {
+    padding: 20px;
+    height: 340px;
     
-    .current-value {
-      font-size: 28px;
-      font-weight: bold;
-      color: #409EFF;
-    }
-    
-    .trend {
-      font-size: 14px;
-      &.up {
-        color: #4caf50;
-      }
-      &.down {
-        color: #f44336;
-      }
-      i {
-        margin-right: 4px;
-      }
-    }
-  }
-
-  .core-stats, .memory-stats {
-    margin-top: 15px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 4px;
-    
-    .core-item, .stat-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
+    .core-stats {
+      margin-top: 15px;
+      padding: 15px;
+      background: rgba(64, 158, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(64, 158, 255, 0.1);
       
-      .label {
-        color: #606266;
-      }
-      
-      .value {
-        font-weight: 500;
-        color: #303133;
-      }
-    }
-  }
-
-  .network-stats {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-    
-    .stat-item {
-      text-align: center;
-      
-      .label {
-        color: #909399;
-        font-size: 12px;
-      }
-      
-      .value {
-        font-size: 18px;
-        font-weight: bold;
-        color: #303133;
-        margin: 5px 0;
-      }
-      
-      .trend {
-        font-size: 12px;
-        &.up { color: #4caf50; }
-        &.down { color: #f44336; }
-        &.stable { color: #909399; }
+      .core-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
         
-        i {
-          margin-right: 2px;
+        .label {
+          color: #8b9bb4;
         }
-      }
-    }
-  }
-
-  .connection-stats {
-    margin-top: 20px;
-    
-    .stat-box {
-      text-align: center;
-      padding: 10px;
-      background: #f8f9fa;
-      border-radius: 4px;
-      
-      .value {
-        font-size: 20px;
-        font-weight: bold;
-        color: #409EFF;
-      }
-      
-      .label {
-        font-size: 12px;
-        color: #606266;
-        margin-top: 5px;
+        
+        .value {
+          font-weight: 500;
+          color: #e1e6f0;
+        }
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }
