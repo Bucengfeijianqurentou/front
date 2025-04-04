@@ -228,6 +228,83 @@
       </el-col>
     </el-row>
 
+    <!-- 图表区域 - 第三行 -->
+    <el-row :gutter="20" class="chart-row">
+      <el-col :span="12">
+        <el-card shadow="hover" class="chart-card">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-data-analysis"></i>
+              <span>资产价值分布</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="assetValueChart" style="width: 100%; height: 300px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="hover" class="chart-card">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-s-marketing"></i>
+              <span>资产使用效率趋势</span>
+            </div>
+            <el-radio-group v-model="efficiencyTimeRange" size="mini">
+              <el-radio-button label="month">月度</el-radio-button>
+              <el-radio-button label="quarter">季度</el-radio-button>
+            </el-radio-group>
+          </div>
+          <div class="chart-container">
+            <div ref="efficiencyChart" style="width: 100%; height: 300px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <!-- 图表区域 - 第四行 -->
+    <el-row :gutter="20" class="chart-row">
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-user"></i>
+              <span>人员权限分布</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="userRoleChart" style="width: 100%; height: 300px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-s-custom"></i>
+              <span>部门资产使用TOP5</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="deptUsageChart" style="width: 100%; height: 300px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-s-help"></i>
+              <span>人员培训情况</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="trainingChart" style="width: 100%; height: 300px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
     <!-- 系统监控图表区域 -->
     <el-row :gutter="20" class="chart-row">
       <!-- CPU使用率实时监控 -->
@@ -515,7 +592,8 @@ export default {
         active: 1286,
         waiting: 89,
         rejected: 23
-      }
+      },
+      efficiencyTimeRange: 'month'
     }
   },
   mounted() {
@@ -640,6 +718,11 @@ export default {
     this.getBlockchainData();
     this.initBlockHeightChart();
     this.initTxSumChart();
+    this.initAssetValueChart();
+    this.initEfficiencyChart();
+    this.initUserRoleChart();
+    this.initDeptUsageChart();
+    this.initTrainingChart();
     
     // 模拟实时数据更新
     setInterval(() => {
@@ -1792,6 +1875,244 @@ export default {
         }]
       }
       chart.setOption(option)
+    },
+    initAssetValueChart() {
+      const chart = echarts.init(this.$refs.assetValueChart, 'dark')
+      const option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}万元 ({d}%)'
+        },
+        legend: {
+          orient: 'vertical',
+          right: '5%',
+          top: 'middle',
+          textStyle: {
+            color: '#e1e6f0',
+            fontSize: 14
+          }
+        },
+        series: [
+          {
+            name: '资产价值',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['40%', '50%'],
+            roseType: 'radius',
+            itemStyle: {
+              borderRadius: 8
+            },
+            label: {
+              color: '#e1e6f0'
+            },
+            data: [
+              { value: 1200, name: '生产设备', itemStyle: { color: '#f56c6c' } },
+              { value: 800, name: '研发设备', itemStyle: { color: '#409eff' } },
+              { value: 600, name: '检测设备', itemStyle: { color: '#67c23a' } },
+              { value: 450, name: '办公设备', itemStyle: { color: '#e6a23c' } },
+              { value: 300, name: '其他设备', itemStyle: { color: '#909399' } }
+            ]
+          }
+        ]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+
+    initEfficiencyChart() {
+      const chart = echarts.init(this.$refs.efficiencyChart, 'dark')
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          top: '10%',
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+          axisLabel: {
+            color: '#e1e6f0'
+          }
+        },
+        yAxis: {
+          type: 'value',
+          max: 100,
+          axisLabel: {
+            formatter: '{value}%',
+            color: '#e1e6f0'
+          }
+        },
+        series: [
+          {
+            name: '设备利用率',
+            type: 'line',
+            smooth: true,
+            lineStyle: {
+              width: 3,
+              color: '#409eff'
+            },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(64,158,255,0.3)' },
+                { offset: 1, color: 'rgba(64,158,255,0.1)' }
+              ])
+            },
+            data: [78, 82, 85, 88, 86, 90]
+          }
+        ]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+
+    initUserRoleChart() {
+      const chart = echarts.init(this.$refs.userRoleChart, 'dark')
+      const option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b}: {c}人'
+        },
+        series: [
+          {
+            name: '权限分布',
+            type: 'funnel',
+            left: '10%',
+            top: 20,
+            bottom: 20,
+            width: '80%',
+            min: 0,
+            max: 100,
+            minSize: '0%',
+            maxSize: '100%',
+            sort: 'descending',
+            gap: 2,
+            label: {
+              show: true,
+              position: 'inside',
+              color: '#fff',
+              formatter: '{b}\n{c}人'
+            },
+            itemStyle: {
+              borderColor: '#fff',
+              borderWidth: 1
+            },
+            emphasis: {
+              label: {
+                fontSize: 16
+              }
+            },
+            data: [
+              { value: 8, name: '系统管理员', itemStyle: { color: '#f56c6c' } },
+              { value: 15, name: '部门主管', itemStyle: { color: '#409eff' } },
+              { value: 45, name: '设备管理员', itemStyle: { color: '#67c23a' } },
+              { value: 80, name: '普通用户', itemStyle: { color: '#e6a23c' } }
+            ]
+          }
+        ]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+
+    initDeptUsageChart() {
+      const chart = echarts.init(this.$refs.deptUsageChart, 'dark')
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'value',
+          axisLabel: {
+            color: '#e1e6f0'
+          }
+        },
+        yAxis: {
+          type: 'category',
+          data: ['研发部', '生产部', '质检部', '工程部', '实验室'],
+          axisLabel: {
+            color: '#e1e6f0'
+          }
+        },
+        series: [
+          {
+            name: '使用次数',
+            type: 'bar',
+            data: [320, 280, 250, 220, 180],
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#409eff' },
+                { offset: 1, color: '#36a3f7' }
+              ]),
+              borderRadius: [0, 4, 4, 0]
+            },
+            label: {
+              show: true,
+              position: 'right',
+              color: '#e1e6f0'
+            }
+          }
+        ]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+
+    initTrainingChart() {
+      const chart = echarts.init(this.$refs.trainingChart, 'dark')
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          bottom: '5%',
+          left: 'center',
+          textStyle: {
+            color: '#e1e6f0'
+          }
+        },
+        series: [
+          {
+            name: '培训情况',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: true,
+            itemStyle: {
+              borderColor: '#1b2838',
+              borderWidth: 2
+            },
+            label: {
+              show: true,
+              color: '#e1e6f0',
+              formatter: '{b}: {c}人'
+            },
+            data: [
+              { value: 85, name: '已完成培训', itemStyle: { color: '#67c23a' } },
+              { value: 25, name: '培训中', itemStyle: { color: '#409eff' } },
+              { value: 15, name: '待培训', itemStyle: { color: '#e6a23c' } }
+            ]
+          }
+        ]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
     }
   }
 }

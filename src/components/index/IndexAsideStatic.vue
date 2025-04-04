@@ -8,7 +8,7 @@
         <el-menu mode="vertical" :unique-opened="true" class="el-menu-demo" style="height:100%;" background-color="#263238" text-color="#a8b6c3" active-text-color="#40c9c6" :default-active="activeIndex">
           <el-menu-item index="0" :style="menulistBorderBottom" @click="menuHandler('')">
             <i class="el-icon-s-home" />
-            <span>数据概览</span>
+            <span>数据监控中心</span>
           </el-menu-item>
 
           <el-submenu index="1" :style="menulistBorderBottom">
