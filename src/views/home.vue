@@ -1,5 +1,5 @@
 <template>
-  <div class="home" style="margin-top: 0; padding-top: 0;">
+  <div class="home dark-theme" style="margin-top: 0; padding-top: 0;">
     <!-- 顶部统计卡片区域 -->
     <el-row :gutter="20">
       <el-col :span="6">
@@ -532,20 +532,127 @@ export default {
     }
   },
   mounted() {
-    this.getTotalInventory() // 获取总资产数量
-    this.initUsageChart()
-    this.initCategoryChart()
-    this.initLocationChart()
-    this.initTimeDistChart()
-    this.initStatusChart()
-    this.initCpuChart()
-    this.initMemoryChart()
-    this.initLoadChart()
-    this.initNetworkChart()
-    this.initConnectionChart()
-    this.getBlockchainData()
-    this.initBlockHeightChart()
-    this.initTxSumChart()
+    // 修改图表主题颜色
+    const chartTheme = {
+      backgroundColor: 'transparent',
+      textStyle: {
+        color: '#8b9bb4'
+      },
+      title: {
+        textStyle: {
+          color: '#e1e6f0'
+        }
+      },
+      line: {
+        itemStyle: {
+          borderWidth: 1
+        },
+        lineStyle: {
+          width: 2
+        },
+        symbolSize: 4,
+        symbol: 'circle',
+        smooth: true
+      },
+      radar: {
+        itemStyle: {
+          borderWidth: 1
+        },
+        lineStyle: {
+          width: 2
+        },
+        symbolSize: 4,
+        symbol: 'circle',
+        smooth: true
+      },
+      bar: {
+        itemStyle: {
+          barBorderWidth: 0,
+          barBorderColor: '#ccc'
+        }
+      },
+      pie: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      scatter: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      boxplot: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      parallel: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      sankey: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      funnel: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      gauge: {
+        itemStyle: {
+          borderWidth: 0,
+          borderColor: '#ccc'
+        }
+      },
+      candlestick: {
+        itemStyle: {
+          color: '#fd1050',
+          color0: '#0cf49b',
+          borderColor: '#fd1050',
+          borderColor0: '#0cf49b',
+          borderWidth: 1
+        }
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#8b9bb4'
+        }
+      },
+      splitLine: {
+        lineStyle: {
+          color: 'rgba(64, 158, 255, 0.1)',
+          type: 'dashed'
+        }
+      }
+    };
+
+    // 应用主题到所有图表
+    echarts.registerTheme('dark', chartTheme);
+    
+    // 初始化时使用暗色主题
+    this.getTotalInventory();
+    this.initUsageChart();
+    this.initCategoryChart();
+    this.initLocationChart();
+    this.initTimeDistChart();
+    this.initStatusChart();
+    this.initCpuChart();
+    this.initMemoryChart();
+    this.initLoadChart();
+    this.initNetworkChart();
+    this.initConnectionChart();
+    this.getBlockchainData();
+    this.initBlockHeightChart();
+    this.initTxSumChart();
     
     // 模拟实时数据更新
     setInterval(() => {
@@ -581,7 +688,7 @@ export default {
       })
     },
     initUsageChart() {
-      this.usageChart = echarts.init(this.$refs.usageChart)
+      this.usageChart = echarts.init(this.$refs.usageChart, 'dark')
       this.updateUsageChart(this.timeRange)
       
       // 响应窗口大小变化
@@ -698,7 +805,7 @@ export default {
       this.usageChart.setOption(option)
     },
     initCategoryChart() {
-      const chart = echarts.init(this.$refs.categoryChart)
+      const chart = echarts.init(this.$refs.categoryChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'item',
@@ -751,7 +858,7 @@ export default {
       })
     },
     initLocationChart() {
-      const chart = echarts.init(this.$refs.locationChart)
+      const chart = echarts.init(this.$refs.locationChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'item',
@@ -792,7 +899,7 @@ export default {
       })
     },
     initTimeDistChart() {
-      const chart = echarts.init(this.$refs.timeDistChart)
+      const chart = echarts.init(this.$refs.timeDistChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -864,7 +971,7 @@ export default {
       })
     },
     initStatusChart() {
-      const chart = echarts.init(this.$refs.statusChart)
+      const chart = echarts.init(this.$refs.statusChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'item'
@@ -916,7 +1023,7 @@ export default {
       })
     },
     initCpuChart() {
-      const chart = echarts.init(this.$refs.cpuChart)
+      const chart = echarts.init(this.$refs.cpuChart, 'dark')
       const option = {
         series: [{
           type: 'gauge',
@@ -992,7 +1099,7 @@ export default {
       window.addEventListener('resize', () => chart.resize())
     },
     initMemoryChart() {
-      const chart = echarts.init(this.$refs.memoryChart)
+      const chart = echarts.init(this.$refs.memoryChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'item'
@@ -1036,7 +1143,7 @@ export default {
       window.addEventListener('resize', () => chart.resize())
     },
     initLoadChart() {
-      const chart = echarts.init(this.$refs.loadChart)
+      const chart = echarts.init(this.$refs.loadChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'axis',
@@ -1095,7 +1202,7 @@ export default {
       window.addEventListener('resize', () => chart.resize())
     },
     initNetworkChart() {
-      const chart = echarts.init(this.$refs.networkChart)
+      const chart = echarts.init(this.$refs.networkChart, 'dark')
       const now = new Date()
       const times = []
       const uploadData = []
@@ -1187,7 +1294,7 @@ export default {
       window.addEventListener('resize', () => chart.resize())
     },
     initConnectionChart() {
-      const chart = echarts.init(this.$refs.connectionChart)
+      const chart = echarts.init(this.$refs.connectionChart, 'dark')
       const option = {
         tooltip: {
           trigger: 'item'
@@ -1292,7 +1399,7 @@ export default {
     },
     
     initBlockHeightChart() {
-      const chart = echarts.init(this.$refs.blockHeightChart)
+      const chart = echarts.init(this.$refs.blockHeightChart, 'dark')
       const option = {
         series: [{
           type: 'gauge',
@@ -1351,7 +1458,7 @@ export default {
     },
     
     initTxSumChart() {
-      const chart = echarts.init(this.$refs.txSumChart)
+      const chart = echarts.init(this.$refs.txSumChart, 'dark')
       const option = {
         series: [{
           type: 'gauge',
@@ -1413,14 +1520,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home {
+.home.dark-theme {
   padding: 20px;
-  background-color: #f5f7fa;
+  background-color: #0f1a2b;  // 更深的蓝色背景
+  min-height: 100vh;
 
   .stat-card {
     height: 140px;
     position: relative;
     overflow: hidden;
+    background: linear-gradient(135deg, #1b2838 0%, #151c2b 100%);  // 偏蓝色的渐变背景
+    border: 1px solid rgba(64, 158, 255, 0.1);
     
     &::before {
       content: '';
@@ -1429,9 +1539,9 @@ export default {
       right: 0;
       width: 40%;
       height: 100%;
-      background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.3));
+      background: linear-gradient(to right, rgba(64, 158, 255, 0), rgba(64, 158, 255, 0.05));
       transform: skewX(-30deg) translateX(10%);
-      opacity: 0.2;
+      opacity: 0.1;
       z-index: 0;
     }
     
@@ -1450,15 +1560,15 @@ export default {
           font-size: 24px;
           margin-right: 8px;
           
-          &.icon-blue { color: #40c9c6; }
-          &.icon-green { color: #67c23a; }
-          &.icon-orange { color: #e6a23c; }
-          &.icon-purple { color: #9c27b0; }
+          &.icon-blue { color: #409eff; }
+          &.icon-green { color: #67e0e3; }
+          &.icon-orange { color: #ffd04b; }
+          &.icon-purple { color: #a084e8; }
         }
         
         span {
           font-size: 14px;
-          color: #606266;
+          color: #e1e6f0;
           font-weight: 500;
         }
       }
@@ -1466,7 +1576,7 @@ export default {
       .stat-value {
         font-size: 28px;
         font-weight: bold;
-        color: #303133;
+        color: #ffffff;
         margin-bottom: 6px;
       }
     }
@@ -1477,17 +1587,17 @@ export default {
       margin-top: 5px;
       margin-bottom: 10px;
       font-size: 12px;
-      color: #909399;
+      color: #8b9bb4;
       position: relative;
       z-index: 1;
       
       .up {
-        color: #67c23a;
+        color: #67e0e3;
         margin-left: 5px;
       }
       
       .down {
-        color: #f56c6c;
+        color: #ff6b6b;
         margin-left: 5px;
       }
     }
@@ -1503,12 +1613,14 @@ export default {
     margin-top: 20px;
     
     .chart-card {
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #1b2838 0%, #151c2b 100%);
       
       .chart-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 1px solid rgba(64, 158, 255, 0.1);
         
         .chart-title {
           display: flex;
@@ -1523,7 +1635,7 @@ export default {
           span {
             font-size: 16px;
             font-weight: 500;
-            color: #303133;
+            color: #e1e6f0;
           }
         }
       }
@@ -1538,12 +1650,14 @@ export default {
     margin-top: 20px;
     
     .activity-card {
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, #1b2838 0%, #151c2b 100%);
       
       .activity-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 1px solid rgba(64, 158, 255, 0.1);
         
         .activity-title {
           display: flex;
@@ -1558,13 +1672,17 @@ export default {
           span {
             font-size: 16px;
             font-weight: 500;
-            color: #303133;
+            color: #e1e6f0;
           }
         }
         
         .view-more {
           color: #409eff;
           font-size: 14px;
+          
+          &:hover {
+            color: #66b1ff;
+          }
         }
       }
       
@@ -1573,7 +1691,7 @@ export default {
           display: flex;
           align-items: center;
           padding: 15px 0;
-          border-bottom: 1px solid #ebeef5;
+          border-bottom: 1px solid rgba(64, 158, 255, 0.1);
           
           &:last-child {
             border-bottom: none;
@@ -1589,30 +1707,18 @@ export default {
             margin-right: 12px;
             
             &.warning {
-              background-color: #fdf6ec;
-              
-              i {
-                color: #e6a23c;
-                font-size: 20px;
-              }
+              background-color: rgba(255, 208, 75, 0.1);
+              i { color: #ffd04b; }
             }
             
             &.processing {
-              background-color: #ecf5ff;
-              
-              i {
-                color: #409eff;
-                font-size: 20px;
-              }
+              background-color: rgba(64, 158, 255, 0.1);
+              i { color: #409eff; }
             }
             
             &.success {
-              background-color: #f0f9eb;
-              
-              i {
-                color: #67c23a;
-                font-size: 20px;
-              }
+              background-color: rgba(103, 224, 227, 0.1);
+              i { color: #67e0e3; }
             }
           }
           
@@ -1628,11 +1734,11 @@ export default {
                 font-weight: 500;
                 margin-right: 5px;
                 font-size: 14px;
-                color: #303133;
+                color: #e1e6f0;
               }
               
               .action {
-                color: #909399;
+                color: #8b9bb4;
                 margin: 0 5px;
                 font-size: 14px;
               }
@@ -1650,18 +1756,18 @@ export default {
                 font-size: 12px;
                 
                 &.warning {
-                  background-color: #fdf6ec;
-                  color: #e6a23c;
+                  background-color: rgba(255, 208, 75, 0.1);
+                  color: #ffd04b;
                 }
                 
                 &.processing {
-                  background-color: #ecf5ff;
+                  background-color: rgba(64, 158, 255, 0.1);
                   color: #409eff;
                 }
                 
                 &.success {
-                  background-color: #f0f9eb;
-                  color: #67c23a;
+                  background-color: rgba(103, 224, 227, 0.1);
+                  color: #67e0e3;
                 }
               }
             }
@@ -1670,7 +1776,7 @@ export default {
               display: flex;
               align-items: center;
               font-size: 12px;
-              color: #909399;
+              color: #8b9bb4;
               
               .time {
                 margin-right: 15px;
@@ -1707,10 +1813,10 @@ export default {
     .trend {
       font-size: 14px;
       &.up {
-        color: #67C23A;
+        color: #4caf50;
       }
       &.down {
-        color: #F56C6C;
+        color: #f44336;
       }
       i {
         margin-right: 4px;
@@ -1762,8 +1868,8 @@ export default {
       
       .trend {
         font-size: 12px;
-        &.up { color: #67C23A; }
-        &.down { color: #F56C6C; }
+        &.up { color: #4caf50; }
+        &.down { color: #f44336; }
         &.stable { color: #909399; }
         
         i {
@@ -1810,8 +1916,9 @@ export default {
   margin: 20px 0;
   
   .blockchain-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border: none;
+    background: linear-gradient(135deg, #1b2838 0%, #151c2b 100%);
+    border: 1px solid rgba(64, 158, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     
     &:hover {
       transform: translateY(-2px);
@@ -1832,7 +1939,7 @@ export default {
         right: -50%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 52%, transparent 55%);
+        background: linear-gradient(45deg, transparent 45%, rgba(64, 158, 255, 0.05) 48%, rgba(64, 158, 255, 0.1) 50%, rgba(64, 158, 255, 0.05) 52%, transparent 55%);
         transform: rotate(45deg);
         animation: shine 3s infinite;
       }
@@ -1844,14 +1951,16 @@ export default {
       .hexagon {
         width: 60px;
         height: 60px;
-        background: linear-gradient(135deg, #40c9c6 0%, #36a3f7 100%);
+        background: linear-gradient(135deg, #409eff 0%, #36a3f7 100%);
         clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 0 20px rgba(64, 158, 255, 0.3);
         
         &.purple {
-          background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+          background: linear-gradient(135deg, #a084e8 0%, #8e6cde 100%);
+          box-shadow: 0 0 20px rgba(160, 132, 232, 0.3);
         }
         
         i {
@@ -1866,7 +1975,7 @@ export default {
       
       .label {
         font-size: 16px;
-        color: #606266;
+        color: #8b9bb4;
         margin-bottom: 8px;
       }
       
@@ -1877,12 +1986,14 @@ export default {
         .number-value {
           font-size: 36px;
           font-weight: bold;
-          color: #40c9c6;
+          color: #409eff;
+          text-shadow: 0 0 10px rgba(64, 158, 255, 0.3);
           position: relative;
           z-index: 2;
           
           &.purple {
-            color: #9c27b0;
+            color: #a084e8;
+            text-shadow: 0 0 10px rgba(160, 132, 232, 0.3);
           }
         }
         
@@ -1918,7 +2029,7 @@ export default {
       
       .update-time {
         font-size: 12px;
-        color: #909399;
+        color: #8b9bb4;
         margin-top: 8px;
       }
       
@@ -1927,14 +2038,15 @@ export default {
         
         .trend-value {
           font-size: 14px;
-          color: #67c23a;
+          color: #67e0e3;
+          text-shadow: 0 0 10px rgba(103, 224, 227, 0.3);
           font-weight: bold;
           margin-right: 8px;
         }
         
         .trend-label {
           font-size: 12px;
-          color: #909399;
+          color: #8b9bb4;
         }
       }
     }
