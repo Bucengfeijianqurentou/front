@@ -76,6 +76,80 @@
       </el-col>
     </el-row>
 
+    <!-- 区块链数据展示区域 -->
+    <el-row :gutter="20" class="blockchain-stats-row">
+      <!-- 区块高度展示 -->
+      <el-col :span="12">
+        <el-card shadow="hover" class="blockchain-card">
+          <div class="blockchain-content">
+            <div class="blockchain-icon">
+              <div class="hexagon">
+                <i class="el-icon-s-data"></i>
+              </div>
+            </div>
+            <div class="blockchain-info">
+              <div class="label">区块高度</div>
+              <div class="value-container">
+                <count-to
+                  :start-val="0"
+                  :end-val="blockNumber"
+                  :duration="2000"
+                  :separator="','"
+                  class="number-value"
+                />
+                <div class="ripple-container">
+                  <div class="ripple"></div>
+                  <div class="ripple"></div>
+                  <div class="ripple"></div>
+                </div>
+              </div>
+              <div class="update-time">最后更新: {{ lastUpdateTime }}</div>
+            </div>
+            <div class="blockchain-chart">
+              <div ref="blockHeightChart" style="width: 150px; height: 150px;"></div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      
+      <!-- 交易总数展示 -->
+      <el-col :span="12">
+        <el-card shadow="hover" class="blockchain-card">
+          <div class="blockchain-content">
+            <div class="blockchain-icon">
+              <div class="hexagon purple">
+                <i class="el-icon-s-order"></i>
+              </div>
+            </div>
+            <div class="blockchain-info">
+              <div class="label">交易总数</div>
+              <div class="value-container">
+                <count-to
+                  :start-val="0"
+                  :end-val="txSum"
+                  :duration="2000"
+                  :separator="','"
+                  class="number-value purple"
+                />
+                <div class="ripple-container purple">
+                  <div class="ripple"></div>
+                  <div class="ripple"></div>
+                  <div class="ripple"></div>
+                </div>
+              </div>
+              <div class="trend">
+                <span class="trend-value">+{{ todayTx }}</span>
+                <span class="trend-label">今日新增</span>
+              </div>
+            </div>
+            <div class="blockchain-chart">
+              <div ref="txSumChart" style="width: 150px; height: 150px;"></div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
     <!-- 图表区域 - 第一行 -->
     <el-row :gutter="20" class="chart-row">
       <el-col :span="16">
@@ -154,6 +228,183 @@
       </el-col>
     </el-row>
 
+    <!-- 系统监控图表区域 -->
+    <el-row :gutter="20" class="chart-row">
+      <!-- CPU使用率实时监控 -->
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card system-monitor">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-cpu"></i>
+              <span>CPU 使用率</span>
+            </div>
+            <div class="real-time-tag">
+              <el-tag size="mini" type="success">实时</el-tag>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div class="gauge-info">
+              <div class="current-value">78.5%</div>
+              <div class="trend up">
+                <i class="el-icon-top"></i>
+                <span>2.3%</span>
+              </div>
+            </div>
+            <div ref="cpuChart" style="width: 100%; height: 200px;"></div>
+            <div class="core-stats">
+              <div class="core-item">
+                <span class="label">核心温度</span>
+                <span class="value">62°C</span>
+              </div>
+              <div class="core-item">
+                <span class="label">主频</span>
+                <span class="value">3.8GHz</span>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+
+      <!-- 内存使用监控 -->
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card system-monitor">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-coin"></i>
+              <span>内存使用情况</span>
+            </div>
+            <div class="real-time-tag">
+              <el-tag size="mini" type="success">实时</el-tag>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="memoryChart" style="width: 100%; height: 200px;"></div>
+            <div class="memory-stats">
+              <div class="stat-row">
+                <span class="label">总内存</span>
+                <span class="value">32GB</span>
+              </div>
+              <div class="stat-row">
+                <span class="label">已使用</span>
+                <span class="value">18.6GB</span>
+              </div>
+              <div class="stat-row">
+                <span class="label">可用</span>
+                <span class="value">13.4GB</span>
+              </div>
+              <el-progress :percentage="58" :show-text="false" :stroke-width="8" color="#409EFF"></el-progress>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+
+      <!-- 系统负载监控 -->
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card system-monitor">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-loading"></i>
+              <span>系统负载</span>
+            </div>
+            <div class="real-time-tag">
+              <el-tag size="mini" type="success">实时</el-tag>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="loadChart" style="width: 100%; height: 280px;"></div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <!-- 网络监控图表区域 -->
+    <el-row :gutter="20" class="chart-row">
+      <!-- 网络流量监控 -->
+      <el-col :span="16">
+        <el-card shadow="hover" class="chart-card system-monitor">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-connection"></i>
+              <span>网络流量监控</span>
+            </div>
+            <div class="monitor-actions">
+              <el-radio-group v-model="networkTimeRange" size="mini">
+                <el-radio-button label="realtime">实时</el-radio-button>
+                <el-radio-button label="hour">1小时</el-radio-button>
+                <el-radio-button label="day">24小时</el-radio-button>
+              </el-radio-group>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="networkChart" style="width: 100%; height: 300px;"></div>
+            <div class="network-stats">
+              <div class="stat-item">
+                <div class="label">上行速率</div>
+                <div class="value">2.8 MB/s</div>
+                <div class="trend up">
+                  <i class="el-icon-top"></i>
+                  <span>12%</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="label">下行速率</div>
+                <div class="value">5.2 MB/s</div>
+                <div class="trend down">
+                  <i class="el-icon-bottom"></i>
+                  <span>8%</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="label">延迟</div>
+                <div class="value">23ms</div>
+                <div class="trend stable">
+                  <i class="el-icon-minus"></i>
+                  <span>稳定</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+
+      <!-- 网络连接状态 -->
+      <el-col :span="8">
+        <el-card shadow="hover" class="chart-card system-monitor">
+          <div slot="header" class="chart-header">
+            <div class="chart-title">
+              <i class="el-icon-s-operation"></i>
+              <span>网络连接状态</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <div ref="connectionChart" style="width: 100%; height: 300px;"></div>
+            <div class="connection-stats">
+              <el-row :gutter="20">
+                <el-col :span="8">
+                  <div class="stat-box">
+                    <div class="value">1,286</div>
+                    <div class="label">活跃连接</div>
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="stat-box">
+                    <div class="value">89</div>
+                    <div class="label">等待连接</div>
+                  </div>
+                </el-col>
+                <el-col :span="8">
+                  <div class="stat-box">
+                    <div class="value">23</div>
+                    <div class="label">拒绝连接</div>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+
     <!-- 最近活动 -->
     <el-row :gutter="20" class="activity-row">
       <el-col :span="12">
@@ -217,9 +468,14 @@
 
 <script>
 import * as echarts from 'echarts'
+import moment from 'moment'
+import CountTo from 'vue-count-to'  // 需要安装 vue-count-to 包
 
 export default {
   name: 'Home',
+  components: {
+    CountTo
+  },
   data() {
     return {
       timeRange: 'week',
@@ -260,7 +516,19 @@ export default {
         { asset: '激光切割机', statusText: '维护中', status: 'processing', time: '今天 15:30', icon: 'el-icon-loading', location: '实验室B区' },
         { asset: 'CNC机床', statusText: '已完成', status: 'success', time: '今天 11:20', icon: 'el-icon-success', location: '工程训练中心' },
         { asset: '工业机器人', statusText: '待维护', status: 'warning', time: '明天 10:00', icon: 'el-icon-warning-outline', location: '实验室C区' }
-      ]
+      ],
+      networkTimeRange: 'realtime',
+      cpuData: [],
+      memoryData: [],
+      networkData: {
+        upload: [],
+        download: []
+      },
+      blockNumber: 0,
+      txSum: 0,
+      todayTx: 0,
+      lastUpdateTime: '',
+      updateTimer: null
     }
   },
   mounted() {
@@ -270,6 +538,29 @@ export default {
     this.initLocationChart()
     this.initTimeDistChart()
     this.initStatusChart()
+    this.initCpuChart()
+    this.initMemoryChart()
+    this.initLoadChart()
+    this.initNetworkChart()
+    this.initConnectionChart()
+    this.getBlockchainData()
+    this.initBlockHeightChart()
+    this.initTxSumChart()
+    
+    // 模拟实时数据更新
+    setInterval(() => {
+      this.updateCharts()
+    }, 3000)
+
+    // 定时更新区块链数据
+    this.updateTimer = setInterval(() => {
+      this.getBlockchainData()
+    }, 10000)
+  },
+  beforeDestroy() {
+    if (this.updateTimer) {
+      clearInterval(this.updateTimer)
+    }
   },
   watch: {
     // 监听timeRange变化，更新图表
@@ -623,6 +914,499 @@ export default {
       window.addEventListener('resize', function() {
         chart.resize()
       })
+    },
+    initCpuChart() {
+      const chart = echarts.init(this.$refs.cpuChart)
+      const option = {
+        series: [{
+          type: 'gauge',
+          startAngle: 180,
+          endAngle: 0,
+          min: 0,
+          max: 100,
+          splitNumber: 8,
+          axisLine: {
+            lineStyle: {
+              width: 6,
+              color: [
+                [0.3, '#67C23A'],
+                [0.7, '#E6A23C'],
+                [1, '#F56C6C']
+              ]
+            }
+          },
+          pointer: {
+            icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
+            length: '12%',
+            width: 20,
+            offsetCenter: [0, '-60%'],
+            itemStyle: {
+              color: 'auto'
+            }
+          },
+          axisTick: {
+            length: 12,
+            lineStyle: {
+              color: 'auto',
+              width: 2
+            }
+          },
+          splitLine: {
+            length: 20,
+            lineStyle: {
+              color: 'auto',
+              width: 3
+            }
+          },
+          axisLabel: {
+            color: '#464646',
+            fontSize: 12,
+            distance: -60,
+            formatter: function(value) {
+              if (value === 100) {
+                return '100%'
+              }
+              return value + ''
+            }
+          },
+          title: {
+            offsetCenter: [0, '-20%'],
+            fontSize: 12
+          },
+          detail: {
+            fontSize: 30,
+            offsetCenter: [0, '0%'],
+            valueAnimation: true,
+            formatter: function(value) {
+              return value.toFixed(1) + '%'
+            },
+            color: 'auto'
+          },
+          data: [{
+            value: 78.5,
+            name: 'CPU'
+          }]
+        }]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+    initMemoryChart() {
+      const chart = echarts.init(this.$refs.memoryChart)
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          bottom: '5%',
+          left: 'center',
+          icon: 'circle'
+        },
+        series: [{
+          name: '内存使用',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          center: ['50%', '40%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: {
+            show: false
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: '18',
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: 18.6, name: '已使用', itemStyle: { color: '#409EFF' } },
+            { value: 13.4, name: '可用', itemStyle: { color: '#95CCE7' } }
+          ]
+        }]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+    initLoadChart() {
+      const chart = echarts.init(this.$refs.loadChart)
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['1分钟', '5分钟', '15分钟', '30分钟', '1小时', '2小时', '3小时']
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            lineStyle: {
+              type: 'dashed'
+            }
+          }
+        },
+        series: [{
+          name: '系统负载',
+          type: 'line',
+          stack: 'Total',
+          smooth: true,
+          lineStyle: {
+            width: 0
+          },
+          showSymbol: false,
+          areaStyle: {
+            opacity: 0.8,
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgb(128, 255, 165)'
+            }, {
+              offset: 1,
+              color: 'rgb(1, 191, 236)'
+            }])
+          },
+          emphasis: {
+            focus: 'series'
+          },
+          data: [1.2, 2.1, 1.8, 2.4, 1.6, 1.9, 1.5]
+        }]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+    initNetworkChart() {
+      const chart = echarts.init(this.$refs.networkChart)
+      const now = new Date()
+      const times = []
+      const uploadData = []
+      const downloadData = []
+      
+      for (let i = 0; i < 60; i++) {
+        times.unshift(moment(now).subtract(i, 'minutes').format('HH:mm'))
+        uploadData.unshift(Math.random() * 3 + 1)
+        downloadData.unshift(Math.random() * 5 + 2)
+      }
+      
+      const option = {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        legend: {
+          data: ['上行流量', '下行流量']
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: times,
+          axisLabel: {
+            interval: 9
+          }
+        },
+        yAxis: {
+          type: 'value',
+          name: 'MB/s',
+          splitLine: {
+            lineStyle: {
+              type: 'dashed'
+            }
+          }
+        },
+        series: [{
+          name: '上行流量',
+          type: 'line',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+            color: '#67C23A'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgba(103,194,58,0.3)'
+            }, {
+              offset: 1,
+              color: 'rgba(103,194,58,0.1)'
+            }])
+          },
+          data: uploadData
+        }, {
+          name: '下行流量',
+          type: 'line',
+          smooth: true,
+          symbol: 'none',
+          lineStyle: {
+            width: 2,
+            color: '#409EFF'
+          },
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgba(64,158,255,0.3)'
+            }, {
+              offset: 1,
+              color: 'rgba(64,158,255,0.1)'
+            }])
+          },
+          data: downloadData
+        }]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+    initConnectionChart() {
+      const chart = echarts.init(this.$refs.connectionChart)
+      const option = {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          top: '5%',
+          left: 'center'
+        },
+        series: [{
+          name: '连接状态',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: '18',
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: 1286, name: '活跃连接', itemStyle: { color: '#67C23A' } },
+            { value: 89, name: '等待连接', itemStyle: { color: '#E6A23C' } },
+            { value: 23, name: '拒绝连接', itemStyle: { color: '#F56C6C' } }
+          ]
+        }]
+      }
+      chart.setOption(option)
+      window.addEventListener('resize', () => chart.resize())
+    },
+    updateCharts() {
+      // 更新CPU数据
+      const cpuChart = echarts.getInstanceByDom(this.$refs.cpuChart)
+      if (cpuChart) {
+        const newValue = Math.random() * 20 + 65 // 模拟65-85之间的CPU使用率
+        cpuChart.setOption({
+          series: [{
+            data: [{
+              value: newValue
+            }]
+          }]
+        })
+      }
+
+      // 更新网络数据
+      const networkChart = echarts.getInstanceByDom(this.$refs.networkChart)
+      if (networkChart) {
+        const option = networkChart.getOption()
+        const uploadData = option.series[0].data
+        const downloadData = option.series[1].data
+        
+        uploadData.shift()
+        downloadData.shift()
+        uploadData.push(Math.random() * 3 + 1)
+        downloadData.push(Math.random() * 5 + 2)
+        
+        networkChart.setOption({
+          series: [{
+            data: uploadData
+          }, {
+            data: downloadData
+          }]
+        })
+      }
+    },
+    // 获取区块链数据
+    getBlockchainData() {
+      // 获取区块高度
+      this.$http({
+        url: '/chain/getBlockNumber',
+        method: "get"
+      }).then(({ data }) => {
+        if (data !== null && data !== undefined) {
+          this.blockNumber = data
+        }
+      })
+
+      // 获取交易总数
+      this.$http({
+        url: '/chain/getTransactionTotal',
+        method: "get"
+      }).then(({ data }) => {
+        if (data !== null && data !== undefined) {
+          this.txSum = data
+        }
+      })
+      
+      this.lastUpdateTime = moment().format('HH:mm:ss')
+      this.todayTx = Math.floor(Math.random() * 1000 + 500) // 模拟今日新增交易数
+    },
+    
+    initBlockHeightChart() {
+      const chart = echarts.init(this.$refs.blockHeightChart)
+      const option = {
+        series: [{
+          type: 'gauge',
+          radius: '100%',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0,
+                  color: '#40c9c6'
+                }, {
+                  offset: 1,
+                  color: '#36a3f7'
+                }]
+              }
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              width: 8,
+              color: [[1, '#e9ecef']]
+            }
+          },
+          splitLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          data: [{
+            value: 85,
+            detail: {
+              show: false
+            }
+          }]
+        }]
+      }
+      chart.setOption(option)
+    },
+    
+    initTxSumChart() {
+      const chart = echarts.init(this.$refs.txSumChart)
+      const option = {
+        series: [{
+          type: 'gauge',
+          radius: '100%',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0,
+                  color: '#9c27b0'
+                }, {
+                  offset: 1,
+                  color: '#7b1fa2'
+                }]
+              }
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              width: 8,
+              color: [[1, '#e9ecef']]
+            }
+          },
+          splitLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false
+          },
+          data: [{
+            value: 92,
+            detail: {
+              show: false
+            }
+          }]
+        }]
+      }
+      chart.setOption(option)
     }
   }
 }
@@ -909,19 +1693,276 @@ export default {
   }
 }
 
-@media screen and (max-width: 1400px) {
-  .home {
-    .stat-card {
-      height: auto;
+.system-monitor {
+  .gauge-info {
+    text-align: center;
+    margin-bottom: 15px;
+    
+    .current-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #409EFF;
+    }
+    
+    .trend {
+      font-size: 14px;
+      &.up {
+        color: #67C23A;
+      }
+      &.down {
+        color: #F56C6C;
+      }
+      i {
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .core-stats, .memory-stats {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    
+    .core-item, .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
       
-      .stat-value {
-        font-size: 24px;
+      .label {
+        color: #606266;
+      }
+      
+      .value {
+        font-weight: 500;
+        color: #303133;
+      }
+    }
+  }
+
+  .network-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    
+    .stat-item {
+      text-align: center;
+      
+      .label {
+        color: #909399;
+        font-size: 12px;
+      }
+      
+      .value {
+        font-size: 18px;
+        font-weight: bold;
+        color: #303133;
+        margin: 5px 0;
+      }
+      
+      .trend {
+        font-size: 12px;
+        &.up { color: #67C23A; }
+        &.down { color: #F56C6C; }
+        &.stable { color: #909399; }
+        
+        i {
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+
+  .connection-stats {
+    margin-top: 20px;
+    
+    .stat-box {
+      text-align: center;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      
+      .value {
+        font-size: 20px;
+        font-weight: bold;
+        color: #409EFF;
+      }
+      
+      .label {
+        font-size: 12px;
+        color: #606266;
+        margin-top: 5px;
+      }
+    }
+  }
+}
+
+.real-time-tag {
+  margin-left: 10px;
+  display: inline-block;
+}
+
+.monitor-actions {
+  float: right;
+}
+
+.blockchain-stats-row {
+  margin: 20px 0;
+  
+  .blockchain-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: none;
+    
+    &:hover {
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+    
+    .blockchain-content {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 48%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 52%, transparent 55%);
+        transform: rotate(45deg);
+        animation: shine 3s infinite;
       }
     }
     
-    .chart-row .chart-card .chart-container {
-      height: auto;
+    .blockchain-icon {
+      margin-right: 20px;
+      
+      .hexagon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #40c9c6 0%, #36a3f7 100%);
+        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &.purple {
+          background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+        }
+        
+        i {
+          font-size: 24px;
+          color: white;
+        }
+      }
     }
+    
+    .blockchain-info {
+      flex: 1;
+      
+      .label {
+        font-size: 16px;
+        color: #606266;
+        margin-bottom: 8px;
+      }
+      
+      .value-container {
+        position: relative;
+        display: inline-block;
+        
+        .number-value {
+          font-size: 36px;
+          font-weight: bold;
+          color: #40c9c6;
+          position: relative;
+          z-index: 2;
+          
+          &.purple {
+            color: #9c27b0;
+          }
+        }
+        
+        .ripple-container {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          
+          .ripple {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 2px solid #40c9c6;
+            animation: ripple 2s infinite;
+            opacity: 0;
+            
+            &:nth-child(2) {
+              animation-delay: 0.5s;
+            }
+            
+            &:nth-child(3) {
+              animation-delay: 1s;
+            }
+          }
+          
+          &.purple .ripple {
+            border-color: #9c27b0;
+          }
+        }
+      }
+      
+      .update-time {
+        font-size: 12px;
+        color: #909399;
+        margin-top: 8px;
+      }
+      
+      .trend {
+        margin-top: 8px;
+        
+        .trend-value {
+          font-size: 14px;
+          color: #67c23a;
+          font-weight: bold;
+          margin-right: 8px;
+        }
+        
+        .trend-label {
+          font-size: 12px;
+          color: #909399;
+        }
+      }
+    }
+    
+    .blockchain-chart {
+      width: 150px;
+      height: 150px;
+    }
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
   }
 }
 </style>
